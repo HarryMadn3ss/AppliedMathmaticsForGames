@@ -26,6 +26,17 @@ public:
 	float DotProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
 	Vector3D CrossProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
 
-	//magnitude andnomalization
+	//magnitude and nomalization
+	float Magnitude(Vector3D _vector);
+	Vector3D Normalize(Vector3D _vector);
+
+	//overloading opperators
+	//addition
+	Vector3D operator+(Vector3D _vector);
+	//multiplcation
+	Vector3D operator*(Vector3D _vector);
+	Vector3D operator*(float _num);
+	//copy/equals
+	void operator=(Vector3D _vector);
 };
 
