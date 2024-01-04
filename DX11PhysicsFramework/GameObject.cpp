@@ -3,11 +3,13 @@
 GameObject::GameObject(string type, Geometry geometry, Material material) : _geometry(geometry), _type(type), _material(material)
 {
 	_parent = nullptr;
-	_position = Vector3D();
-	_rotation = Vector3D();
-	_scale = Vector3D(1.0f, 1.0f, 1.0f);
 
 	_textureRV = nullptr;
+	_transform = new Transform();
+
+	_transform->SetPosiition(Vector3D(0, 0, 0));
+	_transform->SetRotation(Vector3D(0, 0, 0));
+	_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 }
 
 GameObject::~GameObject()
@@ -16,6 +18,9 @@ GameObject::~GameObject()
 	_textureRV = nullptr;
 	_geometry.indexBuffer = nullptr;
 	_geometry.vertexBuffer = nullptr;
+
+	delete _transform;
+	_transform = nullptr;
 }
 
 void GameObject::Update(float dt)

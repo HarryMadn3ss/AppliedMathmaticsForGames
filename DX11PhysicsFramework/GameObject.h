@@ -6,6 +6,7 @@
 
 #include "DebugClass.h"
 #include "Vector3D.h"
+#include "Transform.h"
 
 using namespace DirectX;
 using namespace std;
@@ -37,21 +38,21 @@ public:
 
 	void SetParent(GameObject * parent) { _parent = parent; }
 
-	// Setters and Getters for position/rotation/scale
-	void SetPosition(Vector3D position) { _position = position; }
-	void SetPosition(float x, float y, float z) { _position.x = x; _position.y = y; _position.z = z; }
+	//// Setters and Getters for position/rotation/scale
+	//void SetPosition(Vector3D position) { _position = position; }
+	//void SetPosition(float x, float y, float z) { _position.x = x; _position.y = y; _position.z = z; }
 
-	Vector3D GetPosition() const { return _position; }
+	//Vector3D GetPosition() const { return _position; }
 
-	void SetScale(Vector3D scale) { _scale = scale; }
-	void SetScale(float x, float y, float z) { _scale.x = x; _scale.y = y; _scale.z = z; }
+	//void SetScale(Vector3D scale) { _scale = scale; }
+	//void SetScale(float x, float y, float z) { _scale.x = x; _scale.y = y; _scale.z = z; }
 
-	Vector3D GetScale() const { return _scale; }
+	//Vector3D GetScale() const { return _scale; }
 
-	void SetRotation(Vector3D rotation) { _rotation = rotation; }
-	void SetRotation(float x, float y, float z) { _rotation.x = x; _rotation.y = y; _rotation.z = z; }
+	//void SetRotation(Vector3D rotation) { _rotation = rotation; }
+	//void SetRotation(float x, float y, float z) { _rotation.x = x; _rotation.y = y; _rotation.z = z; }
 
-	Vector3D GetRotation() const { return _rotation; }
+	//Vector3D GetRotation() const { return _rotation; }
 
 
 	// Rendering information
@@ -81,5 +82,7 @@ private:
 	Material _material;
 
 	ID3D11ShaderResourceView* _textureRV = nullptr;
+
+	Transform* _transform;
 };
 
