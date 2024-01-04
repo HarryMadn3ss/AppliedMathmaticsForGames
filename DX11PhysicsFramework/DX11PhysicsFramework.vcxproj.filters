@@ -27,6 +27,8 @@
     <ClInclude Include="DDSTextureLoader.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="DebugClass.h" />
+    <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11PhysicsFramework.cpp" />
@@ -39,6 +41,8 @@
     <ClCompile Include="DDSTextureLoader.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="DebugClass.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
