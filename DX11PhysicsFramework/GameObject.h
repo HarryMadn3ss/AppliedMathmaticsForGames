@@ -7,26 +7,12 @@
 #include "DebugClass.h"
 #include "Vector3D.h"
 #include "Transform.h"
+#include "Appearance.h"
 
 using namespace DirectX;
 using namespace std;
 
-struct Geometry
-{
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
-	int numberOfIndices;
 
-	UINT vertexBufferStride;
-	UINT vertexBufferOffset;
-};
-
-struct Material
-{
-	XMFLOAT4 diffuse;
-	XMFLOAT4 ambient;
-	XMFLOAT4 specular;
-};
 
 class GameObject
 {
@@ -56,8 +42,7 @@ public:
 
 
 	// Rendering information
-	Geometry GetGeometryData() const { return _geometry; }
-	Material GetMaterial() const { return _material; }
+	
 	XMMATRIX GetWorldMatrix() const { return XMLoadFloat4x4(&_world); }
 
 	void SetTextureRV(ID3D11ShaderResourceView * textureRV) { _textureRV = textureRV; }
@@ -69,6 +54,7 @@ public:
 	void Draw(ID3D11DeviceContext * pImmediateContext);
 
 	Transform* _transform;
+	Appearance* _appearance;
 
 private:
 	GameObject* _parent = nullptr;
@@ -80,8 +66,7 @@ private:
 	string _type;
 	XMFLOAT4X4 _world;
 
-	Geometry _geometry;
-	Material _material;
+	
 
 	ID3D11ShaderResourceView* _textureRV = nullptr;
 
