@@ -5,11 +5,12 @@ GameObject::GameObject(string type, Geometry geometry, Material material) : _geo
 	_parent = nullptr;
 
 	_textureRV = nullptr;
-	_transform = new Transform();
 
-	_transform->SetPosiition(Vector3D(0, 0, 0));
-	_transform->SetRotation(Vector3D(0, 0, 0));
-	_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
+	
+
+	/*_position = _transform->GetPosition();
+	_rotation = _transform->GetRotation();
+	_scale = _transform->GetScale();*/
 }
 
 GameObject::~GameObject()
@@ -26,9 +27,9 @@ GameObject::~GameObject()
 void GameObject::Update(float dt)
 {
 	// Calculate world matrix
-	XMMATRIX scale = XMMatrixScaling(_scale.x, _scale.y, _scale.z);
-	XMMATRIX rotation = XMMatrixRotationX(_rotation.x) * XMMatrixRotationY(_rotation.y) * XMMatrixRotationZ(_rotation.z);
-	XMMATRIX translation = XMMatrixTranslation(_position.x, _position.y, _position.z);
+	XMMATRIX scale = XMMatrixScaling(_transform->GetScale().x, _transform->GetScale().y, _transform->GetScale().z);
+	XMMATRIX rotation = XMMatrixRotationX(_transform->GetRotation().x) * XMMatrixRotationY(_transform->GetRotation().y) * XMMatrixRotationZ(_transform->GetRotation().z);
+	XMMATRIX translation = XMMatrixTranslation(_transform->GetPosition().x, _transform->GetPosition().y, _transform->GetPosition().z);
 
 	XMStoreFloat4x4(&_world, scale * rotation * translation);
 
@@ -43,9 +44,12 @@ void GameObject::Update(float dt)
 
 void GameObject::Move(Vector3D direction)
 {
-	_position.x += direction.x;
-	_position.y += direction.y;
-	_position.z += direction.z;
+	float x, y, z;
+
+	x = _transform->GetPosition().x + direction.x;
+	y = _transform->GetPosition().y + direction.y;
+	z = _transform->GetPosition().z + direction.z;
+	_transform->SetPosition(Vector3D(x, y, z));
 }
 
 void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)

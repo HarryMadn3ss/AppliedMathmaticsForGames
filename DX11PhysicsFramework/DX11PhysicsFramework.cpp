@@ -513,27 +513,37 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	noSpecMaterial.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	noSpecMaterial.specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 
+	//floor
 	GameObject* gameObject = new GameObject("Floor", planeGeometry, noSpecMaterial);
-	gameObject->SetPosition(0.0f, 0.0f, 0.0f);
-	gameObject->SetScale(15.0f, 15.0f, 15.0f);
-	gameObject->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
+	Transform* _transformFloor = new Transform();
+	gameObject->_transform = _transformFloor;
+	gameObject->_transform->SetPosition(Vector3D(0.0f, 0.0f, 0.0f));
+	gameObject->_transform->SetScale(Vector3D(15.0f, 15.0f, 15.0f));
+	gameObject->_transform->SetRotation(Vector3D(XMConvertToRadians(90.0f), 0.0f, 0.0f));
 	gameObject->SetTextureRV(_GroundTextureRV);
+	
 
 	_gameObjects.push_back(gameObject);
+
+	Transform* _transformCube[4];
 
 	for (auto i = 0; i < 4; i++)
 	{
 		gameObject = new GameObject("Cube " + i, cubeGeometry, shinyMaterial);
-		gameObject->SetScale(1.0f, 1.0f, 1.0f);
-		gameObject->SetPosition(-2.0f + (i * 2.5f), 1.0f, 10.0f);
+		_transformCube[i] = new Transform();
+		gameObject->_transform = _transformCube[i];
+		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
+		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 1.0f, 10.0f));
 		gameObject->SetTextureRV(_StoneTextureRV);
-
+		
 		_gameObjects.push_back(gameObject);
 	}
 
 	gameObject = new GameObject("Donut", herculesGeometry, shinyMaterial);
-	gameObject->SetScale(1.0f, 1.0f, 1.0f);
-	gameObject->SetPosition(-5.0f, 0.5f, 10.0f);
+	Transform* _transformDonut = new Transform();
+	gameObject->_transform = _transformDonut;
+	gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
+	gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
 	gameObject->SetTextureRV(_StoneTextureRV);
 	_gameObjects.push_back(gameObject);
 
@@ -578,7 +588,7 @@ DX11PhysicsFramework::~DX11PhysicsFramework()
 
 	if (_dxgiDevice)_dxgiDevice->Release();
 	if (_dxgiFactory)_dxgiFactory->Release();
-	if (_device)_device->Release();
+	if (_device)_device->Release();	
 }
 
 void DX11PhysicsFramework::Update()

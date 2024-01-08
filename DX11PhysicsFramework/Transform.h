@@ -17,7 +17,7 @@ public:
 	~Transform();
 
 
-	void SetPosiition(Vector3D position) { _position = position; }
+	void SetPosition(Vector3D position) { _position = position; }
 	Vector3D GetPosition() const { return _position; }
 	void SetRotation(Vector3D rotation) { _rotation = rotation; }
 	Vector3D GetRotation() const { return _rotation; }

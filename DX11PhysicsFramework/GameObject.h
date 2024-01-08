@@ -68,6 +68,8 @@ public:
 	void Move(Vector3D direction);
 	void Draw(ID3D11DeviceContext * pImmediateContext);
 
+	Transform* _transform;
+
 private:
 	GameObject* _parent = nullptr;
 
@@ -83,6 +85,5 @@ private:
 
 	ID3D11ShaderResourceView* _textureRV = nullptr;
 
-	Transform* _transform;
 };
 
