@@ -38,5 +38,6 @@ public:
 	Vector3D operator*(float _num);
 	//copy/equals
 	void operator=(Vector3D _vector);
+	void operator+=(Vector3D _vector);
 };
 

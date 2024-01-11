@@ -31,3 +31,11 @@ void DebugClass::PrintDebugInt(int num)
 	sprintf_s(numToPrint, "Interger is: %d\n", x);
 	OutputDebugStringA(numToPrint);	
 }
+
+void DebugClass::PrintDebugFloat(float num)
+{
+	float x = num;
+	char numToPrint[1024] = { 0 };
+	sprintf_s(numToPrint, "Float is: %f\n", x);
+	OutputDebugStringA(numToPrint);
+}

@@ -87,6 +87,13 @@ void Vector3D::operator=(Vector3D _vector)
 	this->z = _vector.z;	
 }
 
+void Vector3D::operator+=(Vector3D _vector)
+{
+	this->x += _vector.x;
+	this->y += _vector.y;
+	this->z += _vector.z;
+}
+
 
 
 

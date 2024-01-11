@@ -3,6 +3,8 @@
 #include <d3d11.h>
 #include <directxmath.h>
 
+#define FPS60 1.0f/60.0f
+
 using namespace DirectX;
 
 struct SurfaceInfo

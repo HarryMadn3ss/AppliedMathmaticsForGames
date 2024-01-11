@@ -1,11 +1,12 @@
 #include "GameObject.h"
 
-GameObject::GameObject(string type, Geometry geometry, Material material) : _geometry(geometry), _type(type), _material(material)
+GameObject::GameObject(string type, Appearance* appearance ) : _appearance(appearance), _type(type)
 {
 	_parent = nullptr;
 
 	_textureRV = nullptr;
 
+	
 	
 
 	/*_position = _transform->GetPosition();
@@ -17,10 +18,14 @@ GameObject::~GameObject()
 {
 	_parent = nullptr;
 	_textureRV = nullptr;
-	_geometry.indexBuffer = nullptr;
-	_geometry.vertexBuffer = nullptr;
+	
 
+	//delete _physicsModel;
+	//if (_physicsModel) delete _physicsModel;
+	delete _appearance;
 	delete _transform;
+	_physicsModel = nullptr;	
+	_appearance = nullptr;
 	_transform = nullptr;
 }
 
@@ -38,8 +43,9 @@ void GameObject::Update(float dt)
 		XMStoreFloat4x4(&_world, this->GetWorldMatrix() * _parent->GetWorldMatrix());
 	}
 		
-		
-	DebugClass::Instance()->PrintDebugInt(5);
+	//_physicsModel->Update(dt);
+
+	//DebugClass::Instance()->PrintDebugInt(5);
 }
 
 void GameObject::Move(Vector3D direction)
@@ -57,8 +63,10 @@ void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
 	// We are assuming that the constant buffers and all other draw setup has already taken place
 
 	// Set vertex and index buffers
-	pImmediateContext->IASetVertexBuffers(0, 1, &_geometry.vertexBuffer, &_geometry.vertexBufferStride, &_geometry.vertexBufferOffset);
-	pImmediateContext->IASetIndexBuffer(_geometry.indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	Geometry _geometry = _appearance->GetGeometryData();
 
-	pImmediateContext->DrawIndexed(_geometry.numberOfIndices, 0, 0);
+	pImmediateContext->IASetVertexBuffers(0, 1, &_geometry.vertexBuffer, &_geometry.vertexBufferStride, &_geometry.vertexBufferOffset);
+	pImmediateContext->IASetIndexBuffer(_appearance->GetGeometryData().indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+	pImmediateContext->DrawIndexed(_appearance->GetGeometryData().numberOfIndices, 0, 0);
 }

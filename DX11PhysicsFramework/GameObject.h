@@ -8,6 +8,7 @@
 #include "Vector3D.h"
 #include "Transform.h"
 #include "Appearance.h"
+#include "PhysicsModel.h"
 
 using namespace DirectX;
 using namespace std;
@@ -17,7 +18,7 @@ using namespace std;
 class GameObject
 {
 public:
-	GameObject(string type, Geometry geometry, Material material);
+	GameObject(string type, Appearance* apearance);
 	~GameObject();
 
 	string GetType() const { return _type; }
@@ -55,6 +56,7 @@ public:
 
 	Transform* _transform;
 	Appearance* _appearance;
+	PhysicsModel* _physicsModel;
 
 private:
 	GameObject* _parent = nullptr;

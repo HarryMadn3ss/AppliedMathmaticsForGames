@@ -21,5 +21,6 @@ public:
 	static DebugClass* Instance();
 
 	void PrintDebugInt(int num);
+	void PrintDebugFloat(float num);
 };
 

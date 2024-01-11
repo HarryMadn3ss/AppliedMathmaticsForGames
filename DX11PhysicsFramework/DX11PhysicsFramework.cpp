@@ -55,6 +55,8 @@ bool DX11PhysicsFramework::HandleKeyboard(MSG msg)
 
 HRESULT DX11PhysicsFramework::Initialise(HINSTANCE hInstance, int nShowCmd)
 {
+	_timer = Timer();
+
 	HRESULT hr = S_OK;
 
 	hr = CreateWindowHandle(hInstance, nShowCmd);
@@ -514,7 +516,8 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	noSpecMaterial.specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	//floor
-	GameObject* gameObject = new GameObject("Floor", planeGeometry, noSpecMaterial);
+	Appearance* _appearanceFloor = new Appearance(planeGeometry, noSpecMaterial);
+	GameObject* gameObject = new GameObject("Floor", _appearanceFloor);
 	Transform* _transformFloor = new Transform();
 	gameObject->_transform = _transformFloor;
 	gameObject->_transform->SetPosition(Vector3D(0.0f, 0.0f, 0.0f));
@@ -526,20 +529,24 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	_gameObjects.push_back(gameObject);
 
 	Transform* _transformCube[4];
+	PhysicsModel* _physicsModelCube[4];
 
 	for (auto i = 0; i < 4; i++)
 	{
-		gameObject = new GameObject("Cube " + i, cubeGeometry, shinyMaterial);
+		Appearance* _apperanceCube = new Appearance(cubeGeometry, shinyMaterial);
+		gameObject = new GameObject("Cube " + i, _apperanceCube);
 		_transformCube[i] = new Transform();
 		gameObject->_transform = _transformCube[i];
 		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 1.0f, 10.0f));
 		gameObject->SetTextureRV(_StoneTextureRV);
-		
+		_physicsModelCube[i] = new PhysicsModel(_transformCube[i]);
+		gameObject->_physicsModel = _physicsModelCube[i];
 		_gameObjects.push_back(gameObject);
 	}
 
-	gameObject = new GameObject("Donut", herculesGeometry, shinyMaterial);
+	Appearance* _appearanceDonut = new Appearance(herculesGeometry, shinyMaterial);
+	gameObject = new GameObject("Donut", _appearanceDonut);
 	Transform* _transformDonut = new Transform();
 	gameObject->_transform = _transformDonut;
 	gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
@@ -588,56 +595,77 @@ DX11PhysicsFramework::~DX11PhysicsFramework()
 
 	if (_dxgiDevice)_dxgiDevice->Release();
 	if (_dxgiFactory)_dxgiFactory->Release();
-	if (_device)_device->Release();	
+	if (_device)_device->Release();
+
+	
 }
 
 void DX11PhysicsFramework::Update()
 {
-	//Static initializes this value only once    
-	static ULONGLONG frameStart = GetTickCount64();
+	//timer
+	accumulator += _timer.GetDeltaTime();
 
-	ULONGLONG frameNow = GetTickCount64();
-	float deltaTime = (frameNow - frameStart) / 1000.0f;
-	frameStart = frameNow;
+	_timer.Tick();
 
-	static float simpleCount = 0.0f;
-	simpleCount += deltaTime;
-
-	// Move gameobjects
-	if (GetAsyncKeyState('1'))
+	//all motion and object updates go in this while
+	while (accumulator >= FPS60)
 	{
-		_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));
-	}
-	if (GetAsyncKeyState('2'))
-	{
-		_gameObjects[1]->Move(Vector3D(0, 0, 0.02f));
-	}
-	if (GetAsyncKeyState('3'))
-	{
-		_gameObjects[2]->Move(Vector3D(0, 0, -0.02f));
-	}
-	if (GetAsyncKeyState('4'))
-	{
-		_gameObjects[2]->Move(Vector3D(0, 0, 0.02f));
-	}
-	// Update camera
-	float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);
+		DebugClass::Instance()->PrintDebugFloat(accumulator);
 
-	float x = _cameraOrbitRadius * cos(angleAroundZ);
-	float z = _cameraOrbitRadius * sin(angleAroundZ);
+		// Move gameobjects
+		if (GetAsyncKeyState('1'))
+		{
+			_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));
+		}
+		if (GetAsyncKeyState('2'))
+		{
+			_gameObjects[1]->Move(Vector3D(0, 0, 0.02f));
+		}
+		if (GetAsyncKeyState('3'))
+		{
+			_gameObjects[2]->Move(Vector3D(0, 0, -0.02f));
+		}
+		if (GetAsyncKeyState('4'))
+		{
+			_gameObjects[2]->Move(Vector3D(0, 0, 0.02f));
+		}
+		// Update camera
+		float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);
 
-	XMFLOAT3 cameraPos = _camera->GetPosition();
-	cameraPos.x = x;
-	cameraPos.z = z;
+		float x = _cameraOrbitRadius * cos(angleAroundZ);
+		float z = _cameraOrbitRadius * sin(angleAroundZ);
 
-	_camera->SetPosition(cameraPos);
-	_camera->Update();
+		XMFLOAT3 cameraPos = _camera->GetPosition();
+		cameraPos.x = x;
+		cameraPos.z = z;
 
-	// Update objects
-	for (auto gameObject : _gameObjects)
-	{
-		gameObject->Update(deltaTime);
+		_camera->SetPosition(cameraPos);
+		_camera->Update();
+
+		// Update objects
+		for (auto gameObject : _gameObjects)
+		{
+			gameObject->Update(FPS60);
+		}
+
+		//physics movements
+		_gameObjects[2]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
+		_gameObjects[2]->_physicsModel->Update(FPS60);
+
+		accumulator -= 0.016;
 	}
+
+	////Static initializes this value only once    
+	//static ULONGLONG frameStart = GetTickCount64();
+
+	//ULONGLONG frameNow = GetTickCount64();
+	//float deltaTime = (frameNow - frameStart) / 1000.0f;
+	//frameStart = frameNow;
+
+	//static float simpleCount = 0.0f;
+	//simpleCount += deltaTime;
+
+	
 }
 
 void DX11PhysicsFramework::Draw()
@@ -676,7 +704,7 @@ void DX11PhysicsFramework::Draw()
 	for (auto gameObject : _gameObjects)
 	{
 		// Get render material
-		Material material = gameObject->GetMaterial();
+		Material material = gameObject->_appearance->GetMaterial();
 
 		// Copy material to shader
 		_cbData.surface.AmbientMtrl = material.ambient;
