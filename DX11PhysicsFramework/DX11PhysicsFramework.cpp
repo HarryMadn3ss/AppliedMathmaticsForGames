@@ -528,22 +528,25 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 	_gameObjects.push_back(gameObject);
 
-	Transform* _transformCube[4];
-	PhysicsModel* _physicsModelCube[4];
+	/*Transform* _transformCube[4];
+	ParticleModel* _physicsModelCube[4];*/
 
 	for (auto i = 0; i < 4; i++)
 	{
 		Appearance* _apperanceCube = new Appearance(cubeGeometry, shinyMaterial);
 		gameObject = new GameObject("Cube " + i, _apperanceCube);
-		_transformCube[i] = new Transform();
-		gameObject->_transform = _transformCube[i];
+		Transform* _transformCube = new Transform();
+		gameObject->_transform = _transformCube;
 		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 1.0f, 10.0f));
 		gameObject->SetTextureRV(_StoneTextureRV);
-		_physicsModelCube[i] = new PhysicsModel(_transformCube[i]);
-		gameObject->_physicsModel = _physicsModelCube[i];
+		ParticleModel* _physicsModelCube = new ParticleModel(_transformCube, 1.0f);
+		gameObject->_physicsModel = _physicsModelCube;
 		_gameObjects.push_back(gameObject);
 	}
+	_gameObjects[3]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
+	_gameObjects[4]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
+	_gameObjects[4]->_physicsModel->SetAcclerationValue(Vector3D(0, 1, 0));
 
 	Appearance* _appearanceDonut = new Appearance(herculesGeometry, shinyMaterial);
 	gameObject = new GameObject("Donut", _appearanceDonut);
@@ -615,19 +618,20 @@ void DX11PhysicsFramework::Update()
 		// Move gameobjects
 		if (GetAsyncKeyState('1'))
 		{
-			_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));
+			/*_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));*/
+			_gameObjects[1]->MoveForward();
 		}
 		if (GetAsyncKeyState('2'))
 		{
-			_gameObjects[1]->Move(Vector3D(0, 0, 0.02f));
+			_gameObjects[1]->MoveBackward();
 		}
 		if (GetAsyncKeyState('3'))
 		{
-			_gameObjects[2]->Move(Vector3D(0, 0, -0.02f));
+			_gameObjects[2]->MoveForward();
 		}
 		if (GetAsyncKeyState('4'))
 		{
-			_gameObjects[2]->Move(Vector3D(0, 0, 0.02f));
+			_gameObjects[2]->MoveBackward();
 		}
 		// Update camera
 		float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);
@@ -645,12 +649,16 @@ void DX11PhysicsFramework::Update()
 		// Update objects
 		for (auto gameObject : _gameObjects)
 		{
-			gameObject->Update(FPS60);
+			gameObject->Update(FPS60);			
 		}
 
 		//physics movements
-		_gameObjects[2]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
-		_gameObjects[2]->_physicsModel->Update(FPS60);
+		//constant velocity
+		
+		//_gameObjects[3]->_physicsModel->Update(FPS60);
+		////constant acc
+		//		
+		//_gameObjects[4]->_physicsModel->Update(FPS60);
 
 		accumulator -= 0.016;
 	}

@@ -8,7 +8,8 @@
 #include "Vector3D.h"
 #include "Transform.h"
 #include "Appearance.h"
-#include "PhysicsModel.h"
+//#include "PhysicsModel.h"
+#include "ParticleModel.h"
 
 using namespace DirectX;
 using namespace std;
@@ -51,12 +52,13 @@ public:
 	bool HasTexture() const { return _textureRV ? true : false; }
 
 	void Update(float dt);
-	void Move(Vector3D direction);
+	void MoveForward();
+	void MoveBackward();
 	void Draw(ID3D11DeviceContext * pImmediateContext);
 
 	Transform* _transform;
 	Appearance* _appearance;
-	PhysicsModel* _physicsModel;
+	PhysicsModel* _physicsModel = nullptr;
 
 private:
 	GameObject* _parent = nullptr;

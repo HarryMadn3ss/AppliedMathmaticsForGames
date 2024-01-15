@@ -39,5 +39,8 @@ public:
 	//copy/equals
 	void operator=(Vector3D _vector);
 	void operator+=(Vector3D _vector);
+	//division
+	/*Vector3D operator/(Vector3D _vector);*/
+	Vector3D operator/(float _num);
 };
 

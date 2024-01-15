@@ -94,6 +94,22 @@ void Vector3D::operator+=(Vector3D _vector)
 	this->z += _vector.z;
 }
 
+//void Vector3D::operator/(Vector3D _vector)
+//{
+//	this->x = this->x / _vector.x;
+//	this->y = this->y / _vector.y;
+//	this->z = this->z / _vector.z;
+//}
+
+Vector3D Vector3D::operator/(float _num)
+{
+	Vector3D newVector = Vector3D(0, 0, 0);
+	newVector.x = this->x / _num;
+	newVector.y = this->y / _num;
+	newVector.z = this->z / _num;
+	return newVector;
+}
+
 
 
 

@@ -43,20 +43,33 @@ void GameObject::Update(float dt)
 		XMStoreFloat4x4(&_world, this->GetWorldMatrix() * _parent->GetWorldMatrix());
 	}
 		
-	//_physicsModel->Update(dt);
+	if (_physicsModel != nullptr)
+	{
+		_physicsModel->Update(dt);
+	}
 
 	//DebugClass::Instance()->PrintDebugInt(5);
 }
 
-void GameObject::Move(Vector3D direction)
+void GameObject::MoveForward()
 {
-	float x, y, z;
-
-	x = _transform->GetPosition().x + direction.x;
-	y = _transform->GetPosition().y + direction.y;
-	z = _transform->GetPosition().z + direction.z;
-	_transform->SetPosition(Vector3D(x, y, z));
+	_physicsModel->AddForce(Vector3D(0, 0, -1));
 }
+
+void GameObject::MoveBackward()
+{
+	_physicsModel->AddForce(Vector3D(0, 0, 1));
+}
+
+//void GameObject::Move(Vector3D direction)
+//{
+//	/*float x, y, z;
+//
+//	x = _transform->GetPosition().x + direction.x;
+//	y = _transform->GetPosition().y + direction.y;
+//	z = _transform->GetPosition().z + direction.z;
+//	_transform->SetPosition(Vector3D(x, y, z));*/
+//}
 
 void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
 {
