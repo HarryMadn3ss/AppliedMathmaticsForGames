@@ -17,6 +17,8 @@ protected:
 	bool _simulateGravity = true;
 	Vector3D _netForce;
 	float _mass = 1.0f;
+
+	float _dragValue;
 public:
 	PhysicsModel(Transform* transform, float mass);
 	virtual ~PhysicsModel() = 0;
@@ -29,6 +31,7 @@ public:
 
 	void AddForce(Vector3D force) { _netForce += force; }
 	Vector3D GravityForce() { return Vector3D(0, -9.81 * _mass, 0); }
+	Vector3D DragForce();
 
 };
 
