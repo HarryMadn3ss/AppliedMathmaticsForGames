@@ -44,7 +44,10 @@ float Vector3D::Magnitude(Vector3D _vector)
 Vector3D Vector3D::Normalize(Vector3D _vector)
 {
 	float vectorMag = Magnitude(_vector);
-	Vector3D normalizedVector;
+
+	if (vectorMag == 0) return Vector3D(0,0,0);
+
+	Vector3D normalizedVector = Vector3D(0,0,0);
 	normalizedVector.x = _vector.x / vectorMag;
 	normalizedVector.y = _vector.y / vectorMag;
 	normalizedVector.z = _vector.z / vectorMag;
@@ -108,6 +111,12 @@ Vector3D Vector3D::operator/(float _num)
 	newVector.y = this->y / _num;
 	newVector.z = this->z / _num;
 	return newVector;
+}
+
+bool Vector3D::operator!=(Vector3D _vector)
+{
+	if (this->x != _vector.x || this->y != _vector.y || this->z != _vector.z) return true;
+	else return false;	
 }
 
 

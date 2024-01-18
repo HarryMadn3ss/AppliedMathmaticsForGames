@@ -9,9 +9,9 @@ GameObject::GameObject(string type, Appearance* appearance ) : _appearance(appea
 	
 	
 
-	/*_position = _transform->GetPosition();
-	_rotation = _transform->GetRotation();
-	_scale = _transform->GetScale();*/
+	_position = Vector3D(0,0,0);
+	_rotation = Vector3D(0, 0, 0);
+	_scale = Vector3D(0, 0, 0);
 }
 
 GameObject::~GameObject()

@@ -42,5 +42,7 @@ public:
 	//division
 	/*Vector3D operator/(Vector3D _vector);*/
 	Vector3D operator/(float _num);
+
+	bool operator!=(Vector3D _vector);
 };
 

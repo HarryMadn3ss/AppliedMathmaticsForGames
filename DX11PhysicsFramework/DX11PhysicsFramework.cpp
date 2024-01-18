@@ -55,7 +55,7 @@ bool DX11PhysicsFramework::HandleKeyboard(MSG msg)
 
 HRESULT DX11PhysicsFramework::Initialise(HINSTANCE hInstance, int nShowCmd)
 {
-	_timer = Timer();
+	_timer = Timer();	
 
 	HRESULT hr = S_OK;
 
@@ -546,7 +546,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	}
 	_gameObjects[3]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
 	_gameObjects[4]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
-	_gameObjects[4]->_physicsModel->SetAcclerationValue(Vector3D(0, 1, 0));
+	
 
 	Appearance* _appearanceDonut = new Appearance(herculesGeometry, shinyMaterial);
 	gameObject = new GameObject("Donut", _appearanceDonut);
@@ -616,6 +616,10 @@ void DX11PhysicsFramework::Update()
 		DebugClass::Instance()->PrintDebugFloat(accumulator);
 
 		// Move gameobjects
+		// 
+		//constant forces
+		_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 9.81, 0));
+
 		if (GetAsyncKeyState('1'))
 		{
 			/*_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));*/
