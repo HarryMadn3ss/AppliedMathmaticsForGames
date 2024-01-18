@@ -20,6 +20,8 @@ protected:
 
 	bool _simulateDrag = true;
 	float _dragValue = 0;
+	bool _simulateFriction= true;
+	float _frictionValue = 0;
 public:
 	PhysicsModel(Transform* transform, float mass);
 	virtual ~PhysicsModel() = 0;
@@ -33,6 +35,7 @@ public:
 	void AddForce(Vector3D force) { _netForce += force; }
 	Vector3D GravityForce() { return Vector3D(0, -9.81 * _mass, 0); }
 	Vector3D DragForce();
+	Vector3D FrictionForce();
 
 };
 

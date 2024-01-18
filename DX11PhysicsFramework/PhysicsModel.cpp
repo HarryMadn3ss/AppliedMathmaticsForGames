@@ -28,6 +28,10 @@ void PhysicsModel::Update(float deltaTime)
 	{
 		_netForce += DragForce();
 	}	
+	if (!_simulateGravity || position.y <= 1)
+	{
+		_netForce += FrictionForce();
+	}
 
 	_acclerationValue += _netForce / _mass;
 	_velocity = _velocity + _acclerationValue * deltaTime;	
@@ -57,4 +61,15 @@ Vector3D PhysicsModel::DragForce()
 		
 	return finalDrag;
 		
+}
+
+Vector3D PhysicsModel::FrictionForce()
+{
+	_frictionValue = 0.42 *_mass * 9.81;
+
+	Vector3D velCopy = GetVelocity();
+	
+	Vector3D finalFriction = velCopy.Normalize(velCopy) * -_frictionValue;
+
+	return finalFriction;
 }
