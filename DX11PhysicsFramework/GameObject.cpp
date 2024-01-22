@@ -53,12 +53,22 @@ void GameObject::Update(float dt)
 
 void GameObject::MoveForward()
 {
-	_physicsModel->AddForce(Vector3D(0, 0, -1));
+	_physicsModel->AddForce(Vector3D(0, 0, -5));
+}
+
+void GameObject::MoveLeft()
+{
+	_physicsModel->AddForce(Vector3D(-5, 0, 0));
+}
+
+void GameObject::MoveRight()
+{
+	_physicsModel->AddForce(Vector3D(5, 0, 0));
 }
 
 void GameObject::MoveBackward()
 {
-	_physicsModel->AddForce(Vector3D(0, 0, 1));
+	_physicsModel->AddForce(Vector3D(0, 0, 5));
 }
 
 //void GameObject::Move(Vector3D direction)

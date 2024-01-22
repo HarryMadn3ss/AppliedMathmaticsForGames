@@ -34,6 +34,9 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="PhysicsModel.h" />
     <ClInclude Include="ParticleModel.h" />
+    <ClInclude Include="RigidBodyModel.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="SphereCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11PhysicsFramework.cpp" />
@@ -53,6 +56,9 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="PhysicsModel.cpp" />
     <ClCompile Include="ParticleModel.cpp" />
+    <ClCompile Include="RigidBodyModel.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

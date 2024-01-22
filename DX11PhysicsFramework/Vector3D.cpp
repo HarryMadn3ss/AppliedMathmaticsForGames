@@ -65,6 +65,15 @@ Vector3D Vector3D::operator+(Vector3D _vector)
 	return addedVectors;
 }
 
+Vector3D Vector3D::operator-(Vector3D _vector)
+{
+	Vector3D subVectors;
+	subVectors.x = this->x - _vector.x;
+	subVectors.y = this->y - _vector.y;
+	subVectors.z = this->z - _vector.z;
+	return subVectors;
+}
+
 Vector3D Vector3D::operator*(Vector3D _vector)
 {
 	Vector3D multipliedVectors;

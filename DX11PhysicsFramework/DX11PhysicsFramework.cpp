@@ -540,8 +540,10 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 1.0f, 10.0f));
 		gameObject->SetTextureRV(_StoneTextureRV);
-		ParticleModel* _physicsModelCube = new ParticleModel(_transformCube, 1.0f);
+		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f);
 		gameObject->_physicsModel = _physicsModelCube;
+		SphereCollider* _colliderCube = new SphereCollider(_transformCube, 1.0f);
+		gameObject->_physicsModel->SetCollider(_colliderCube);
 		_gameObjects.push_back(gameObject);
 	}
 	_gameObjects[3]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
@@ -613,12 +615,20 @@ void DX11PhysicsFramework::Update()
 	//all motion and object updates go in this while
 	while (accumulator >= FPS60)
 	{
-		DebugClass::Instance()->PrintDebugFloat(accumulator);
+		//DebugClass::Instance()->PrintDebugFloat(accumulator);
+
+		if (_gameObjects[1]->_physicsModel->IsCollidable() && _gameObjects[2]->_physicsModel->IsCollidable())
+		{
+			if (_gameObjects[1]->_physicsModel->GetCollider()->CollidesWith(*_gameObjects[2]->_physicsModel->GetCollider()))
+			{
+				DebugClass::Instance()->PrintDebugFloat(1);
+			}
+		}
 
 		// Move gameobjects
 		// 
 		//constant forces
-		_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 9.81, 0));
+		_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 10, 0));
 
 		if (GetAsyncKeyState('1'))
 		{
@@ -628,6 +638,14 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('2'))
 		{
 			_gameObjects[1]->MoveBackward();
+		}
+		if (GetAsyncKeyState('A'))
+		{
+			_gameObjects[1]->MoveLeft();
+		}
+		if (GetAsyncKeyState('D'))
+		{
+			_gameObjects[1]->MoveRight();
 		}
 		if (GetAsyncKeyState('3'))
 		{

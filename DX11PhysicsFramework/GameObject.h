@@ -9,7 +9,8 @@
 #include "Transform.h"
 #include "Appearance.h"
 //#include "PhysicsModel.h"
-#include "ParticleModel.h"
+//#include "ParticleModel.h"
+#include "RigidBodyModel.h"
 
 using namespace DirectX;
 using namespace std;
@@ -53,12 +54,15 @@ public:
 
 	void Update(float dt);
 	void MoveForward();
+	void MoveLeft();
+	void MoveRight();
 	void MoveBackward();
 	void Draw(ID3D11DeviceContext * pImmediateContext);
 
 	Transform* _transform;
 	Appearance* _appearance;
 	PhysicsModel* _physicsModel = nullptr;
+	//RigidBodyModel* _rigedBody = nullptr;
 
 private:
 	GameObject* _parent = nullptr;

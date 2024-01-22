@@ -1,6 +1,10 @@
 #include "PhysicsModel.h"
 #include <cmath>
 
+PhysicsModel::PhysicsModel()
+{
+}
+
 PhysicsModel::PhysicsModel(Transform* transform, float mass)
 {
 	_transform = transform;
@@ -14,24 +18,35 @@ PhysicsModel::~PhysicsModel()
 
 void PhysicsModel::Update(float deltaTime)
 {
-	Vector3D position = _transform->GetPosition();
-	if (position.y < 0 )
+	Vector3D position = _transform->GetPosition();	
+
+
+	if (position.y > 1)
 	{
-		int x = 0;
+		_simulateGravity = true;
+		_simulateFriction = false;
+	}
+	else
+	{
+		_simulateGravity = false;
+		_simulateFriction = true;
 	}
 
-	if (_simulateGravity && position.y > 1)
+	if (_simulateGravity)
 	{
 		_netForce += GravityForce();
+	}	
+
+	if (_simulateFriction)
+	{
+		_netForce += FrictionForce();
 	}
+
 	if (_simulateDrag)
 	{
 		_netForce += DragForce();
 	}	
-	if (!_simulateGravity || position.y <= 1)
-	{
-		_netForce += FrictionForce();
-	}
+	
 
 	_acclerationValue += _netForce / _mass;
 	_velocity = _velocity + _acclerationValue * deltaTime;	
@@ -65,7 +80,7 @@ Vector3D PhysicsModel::DragForce()
 
 Vector3D PhysicsModel::FrictionForce()
 {
-	_frictionValue = 0.42 *_mass * 9.81;
+	_frictionValue = 0.42 * _mass  * 9.81 ;
 
 	Vector3D velCopy = GetVelocity();
 	

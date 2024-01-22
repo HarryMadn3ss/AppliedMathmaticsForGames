@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Transform.h"
+#include "SphereCollider.h"
 
 class PhysicsModel
 {
@@ -11,6 +12,8 @@ protected:
 	Transform* _transform = nullptr;
 	Vector3D _velocity = Vector3D(0, 0, 0);
 
+	Collider* _collider = nullptr;
+
 	Vector3D _acclerationValue = Vector3D(0, 0, 0);
 	/*bool _constantAcceleration = false;*/
 
@@ -20,9 +23,10 @@ protected:
 
 	bool _simulateDrag = true;
 	float _dragValue = 0;
-	bool _simulateFriction= true;
+	bool _simulateFriction= false;
 	float _frictionValue = 0;
 public:
+	PhysicsModel();
 	PhysicsModel(Transform* transform, float mass);
 	virtual ~PhysicsModel() = 0;
 
@@ -37,5 +41,8 @@ public:
 	Vector3D DragForce();
 	Vector3D FrictionForce();
 
+	bool IsCollidable() const { return _collider != nullptr; }
+	Collider* GetCollider() const { return _collider; }
+	void SetCollider(Collider* collider) { _collider = collider; }
 };
 

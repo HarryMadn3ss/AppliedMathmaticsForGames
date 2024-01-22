@@ -22,5 +22,6 @@ public:
 
 	void PrintDebugInt(int num);
 	void PrintDebugFloat(float num);
+	void PrintDebugString(std::string text);
 };
 

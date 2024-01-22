@@ -3,11 +3,19 @@
 class ParticleModel : public PhysicsModel
 {
 private:
+	float _timeAlive;
+	float _resetTime;
+
+	bool _invertGravity;
 
 protected:
 
 public:
-	ParticleModel(Transform* transform, float mass);
+	ParticleModel(Transform* transform, float mass) : PhysicsModel(transform, mass) {};
+	ParticleModel(Transform* transform,  Vector3D pertubation, float resetTime, bool invertGravity);
 	~ParticleModel();
+
+	void Update(float deltaTime);
+	void Reset();
 };
 

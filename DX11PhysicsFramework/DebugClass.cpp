@@ -39,3 +39,11 @@ void DebugClass::PrintDebugFloat(float num)
 	sprintf_s(numToPrint, "Float is: %f\n", x);
 	OutputDebugStringA(numToPrint);
 }
+
+void DebugClass::PrintDebugString(std::string text)
+{
+	std::string txt = text;
+	char stringToPrint[1024] = { 0 };
+	sprintf_s(stringToPrint, "String is: %s\n", txt);
+	OutputDebugStringA(stringToPrint);
+}
