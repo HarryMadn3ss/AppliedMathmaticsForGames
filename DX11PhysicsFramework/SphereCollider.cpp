@@ -3,7 +3,7 @@
 bool SphereCollider::CollidesWith(SphereCollider& other)
 {
     Vector3D distance = other.GetPosition() - this->GetPosition();
-    float distanceMagnitude = distance.Magnitude(distance);
+    float distanceMagnitude = distance.Magnitude();
 
     float combindedRadii = other.GetRadius() + this->GetRadius();
     if (combindedRadii > distanceMagnitude)

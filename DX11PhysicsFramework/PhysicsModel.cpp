@@ -63,7 +63,7 @@ Vector3D PhysicsModel::DragForce()
 	Vector3D velCopy = GetVelocity();	
 	
 
-	float magnitude = _velocity.Magnitude(velCopy);
+	float magnitude = velCopy.Magnitude();
 
 	_dragValue = 0.5 * (magnitude * magnitude) * 1.293 * 1.05 * 1;
 
@@ -83,8 +83,23 @@ Vector3D PhysicsModel::FrictionForce()
 	_frictionValue = 0.42 * _mass  * 9.81 ;
 
 	Vector3D velCopy = GetVelocity();
+	float mag = velCopy.Magnitude();
 	
 	Vector3D finalFriction = velCopy.Normalize(velCopy) * -_frictionValue;
+
+	//if (finalFriction > (velCopy * -1))
+	//{
+	//	//limit
+	//	return velCopy;
+	//}
+	//else if (finalFriction < velCopy)
+	/*{
+		return velCopy * -1;
+	}*/
+	if (velCopy == Vector3D(0, 0, 0) || mag < 0.1f)
+	{
+		return velCopy * -1;
+	}
 
 	return finalFriction;
 }

@@ -21,13 +21,14 @@ public:
 	//overrides
 	Vector3D(float _x, float _y, float _z);
 
+	Vector3D Zero();
 
 	//cros and dot product
 	float DotProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
 	Vector3D CrossProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
 
 	//magnitude and nomalization
-	float Magnitude(Vector3D _vector);
+	float Magnitude();
 	Vector3D Normalize(Vector3D _vector);
 
 	//overloading opperators
@@ -40,11 +41,14 @@ public:
 	Vector3D operator*(float _num);
 	//copy/equals
 	void operator=(Vector3D _vector);
+	bool operator==(Vector3D _vector);
 	void operator+=(Vector3D _vector);
 	//division
 	/*Vector3D operator/(Vector3D _vector);*/
 	Vector3D operator/(float _num);
 
 	bool operator!=(Vector3D _vector);
+	bool operator>(Vector3D _vector);
+	bool operator<(Vector3D _vector);
 };
 

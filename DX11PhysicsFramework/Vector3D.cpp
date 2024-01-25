@@ -15,6 +15,11 @@ Vector3D::Vector3D(float _x, float _y, float _z)
 	z = _z;
 }
 
+Vector3D Vector3D::Zero()
+{
+	return Vector3D(0.0f, 0.0f, 0.0f);
+}
+
 float Vector3D::DotProduct(Vector3D _vectorOne, Vector3D _vectorTwo)
 {
 	float dotProduct = 0.0f;		
@@ -34,16 +39,16 @@ Vector3D Vector3D::CrossProduct(Vector3D _vectorOne, Vector3D _vectorTwo)
 	return crossProduct;
 }
 
-float Vector3D::Magnitude(Vector3D _vector)
+float Vector3D::Magnitude()
 {
-	float magnitude = sqrt(pow(_vector.x, 2) + pow(_vector.y, 2) + pow(_vector.z, 2));
+	float magnitude = sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 
 	return magnitude;
 }
 
 Vector3D Vector3D::Normalize(Vector3D _vector)
 {
-	float vectorMag = Magnitude(_vector);
+	float vectorMag = Magnitude();
 
 	if (vectorMag == 0) return Vector3D(0,0,0);
 
@@ -99,6 +104,12 @@ void Vector3D::operator=(Vector3D _vector)
 	this->z = _vector.z;	
 }
 
+bool Vector3D::operator==(Vector3D _vector)
+{
+	if (this->x == _vector.x && this->y == _vector.y && this->z == _vector.z) return true;
+	else return false;
+}
+
 void Vector3D::operator+=(Vector3D _vector)
 {
 	this->x += _vector.x;
@@ -126,6 +137,18 @@ bool Vector3D::operator!=(Vector3D _vector)
 {
 	if (this->x != _vector.x || this->y != _vector.y || this->z != _vector.z) return true;
 	else return false;	
+}
+
+bool Vector3D::operator>(Vector3D _vector)
+{
+	if (this->x > _vector.x && this->y > _vector.y && this->z > _vector.z) return true;
+	else return false;
+}
+
+bool Vector3D::operator<(Vector3D _vector)
+{
+	if (this->x < _vector.x && this->y < _vector.y && this->z < _vector.z) return true;
+	else return false;
 }
 
 
