@@ -2,6 +2,7 @@
 
 #include "Transform.h"
 #include "SphereCollider.h"
+#include "AABBCollider.h"
 
 class PhysicsModel
 {
@@ -44,5 +45,8 @@ public:
 	bool IsCollidable() const { return _collider != nullptr; }
 	Collider* GetCollider() const { return _collider; }
 	void SetCollider(Collider* collider) { _collider = collider; }
+
+	//collision reposne
+	void ApplyImpulse(Vector3D impulse){ _velocity += impulse; }
 };
 

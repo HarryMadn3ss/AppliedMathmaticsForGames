@@ -542,7 +542,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		gameObject->SetTextureRV(_StoneTextureRV);
 		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f);
 		gameObject->_physicsModel = _physicsModelCube;
-		SphereCollider* _colliderCube = new SphereCollider(_transformCube, 1.0f);
+		AABBCollider* _colliderCube = new AABBCollider(_transformCube, Vector3D(2.0f, 2.0f, 2.0f));
 		gameObject->_physicsModel->SetCollider(_colliderCube);
 		_gameObjects.push_back(gameObject);
 	}
@@ -621,7 +621,12 @@ void DX11PhysicsFramework::Update()
 		{
 			if (_gameObjects[1]->_physicsModel->GetCollider()->CollidesWith(*_gameObjects[2]->_physicsModel->GetCollider()))
 			{
-				DebugClass::Instance()->PrintDebugFloat(1);
+				/*_gameObjects[1]->_physicsModel->ApplyImpulse(Vector3D(-1, 0, 0));
+				_gameObjects[2]->_physicsModel->ApplyImpulse(Vector3D(1, 0, 0));*/
+
+				DebugClass::Instance()->PrintDebugString("Collision");
+
+				
 			}
 		}
 

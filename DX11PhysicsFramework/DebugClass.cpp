@@ -44,6 +44,6 @@ void DebugClass::PrintDebugString(std::string text)
 {
 	std::string txt = text;
 	char stringToPrint[1024] = { 0 };
-	sprintf_s(stringToPrint, "String is: %s\n", txt);
+	sprintf_s(stringToPrint, "String is: %s\n", txt.c_str());
 	OutputDebugStringA(stringToPrint);
 }
