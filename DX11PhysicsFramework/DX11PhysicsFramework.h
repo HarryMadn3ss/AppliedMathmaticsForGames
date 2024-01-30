@@ -16,6 +16,8 @@
 #include "GameObject.h"
 #include "Timer.h"
 
+#include <math.h>
+
 using namespace DirectX;
 
 class DX11PhysicsFramework

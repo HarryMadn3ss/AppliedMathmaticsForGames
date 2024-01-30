@@ -21,6 +21,8 @@ public:
 	virtual bool CollidesWith(SphereCollider& other) override;
 	virtual bool CollidesWith(AABBCollider& other) override;
 
+	Vector3D GetHalfExtents() { return Vector3D(_rx, _ry, _rz); }
+
 
 };
 

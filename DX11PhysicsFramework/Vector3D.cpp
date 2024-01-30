@@ -60,6 +60,33 @@ Vector3D Vector3D::Normalize()
 	return normalizedVector;
 }
 
+Vector3D Vector3D::Clamp(Vector3D max, Vector3D min)
+{
+	Vector3D clampedVector;
+	if (this->x > max.x) clampedVector.x = max.x;
+	else if (this->x < min.x) clampedVector.x = min.x;
+	else clampedVector.x = this->x;
+
+	if (this->y > max.y) clampedVector.y = max.y;
+	else if (this->y < min.y) clampedVector.y = min.y;
+	else clampedVector.x = this->y;
+
+	if (this->z > max.z) clampedVector.z = max.z;
+	else if (this->z < min.z) clampedVector.z = min.z;
+	else clampedVector.x = this->z;
+
+	return clampedVector;
+}
+
+Vector3D Vector3D::Inverse()
+{
+	Vector3D inversed;
+	inversed.x = -this->x;
+	inversed.y = -this->y;
+	inversed.z = -this->z;
+	return inversed;
+}
+
 Vector3D Vector3D::operator+(Vector3D _vector)
 {
 	Vector3D addedVectors;

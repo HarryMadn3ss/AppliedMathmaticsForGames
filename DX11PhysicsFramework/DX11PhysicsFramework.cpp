@@ -633,10 +633,24 @@ void DX11PhysicsFramework::Update()
 				//if both objects are approching each other
 				if (Vector3D::DotProduct(collisionNormal, relVelocity) < 0.0f)
 				{
+					float distance = (_gameObjects[1]->_transform->GetPosition() - _gameObjects[2]->_transform->GetPosition()).Magnitude();
+					AABBCollider* boxOne = (AABBCollider*)_gameObjects[1]->_physicsModel->GetCollider();
+					Vector3D halfExtentsBoxOne = boxOne->GetHalfExtents();
+					AABBCollider* boxTwo = (AABBCollider*)_gameObjects[2]->_physicsModel->GetCollider();
+					Vector3D halfExtentsBoxTwo = boxOne->GetHalfExtents();
+					//clamp
+					Vector3D pointBoxOne = _gameObjects[2]->_transform->GetPosition().Clamp(halfExtentsBoxOne, halfExtentsBoxOne.Inverse());
+					Vector3D pointBoxTwo = _gameObjects[1]->_transform->GetPosition().Clamp(halfExtentsBoxTwo, halfExtentsBoxTwo.Inverse());
+
+					float pointDist = (pointBoxOne - pointBoxTwo).Magnitude();
+
+					_gameObjects[1]->_transform->SetPosition(_gameObjects[1]->_transform->GetPosition() + collisionNormal * pointDist * (1 / _gameObjects[1]->_physicsModel->GetMass()));
+					_gameObjects[2]->_transform->SetPosition(_gameObjects[2]->_transform->GetPosition() + collisionNormal * -pointDist * (1 /_gameObjects[2]->_physicsModel->GetMass()));
+
 					Vector3D vj =  (collisionNormal * -(1 + restitution)) * relVelocity;
-					Vector3D j = vj / (-_gameObjects[1]->_physicsModel->GetMass() + -_gameObjects[2]->_physicsModel->GetMass());
-					_gameObjects[1]->_physicsModel->ApplyImpulse((j * -_gameObjects[1]->_physicsModel->GetMass()) * collisionNormal);
-					_gameObjects[2]->_physicsModel->ApplyImpulse((j * -(-_gameObjects[1]->_physicsModel->GetMass())) * collisionNormal);
+					Vector3D j = vj / ((1/ _gameObjects[1]->_physicsModel->GetMass()) + (1/ _gameObjects[2]->_physicsModel->GetMass()));
+					_gameObjects[1]->_physicsModel->ApplyImpulse((j * (1/_gameObjects[1]->_physicsModel->GetMass())) * collisionNormal);
+					_gameObjects[2]->_physicsModel->ApplyImpulse((j * -(1/ _gameObjects[1]->_physicsModel->GetMass())) * collisionNormal);
 				}
 			}
 		}

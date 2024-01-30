@@ -31,6 +31,10 @@ public:
 	float Magnitude();
 	Vector3D Normalize();
 
+	//other
+	Vector3D Clamp(Vector3D max, Vector3D min);
+	Vector3D Inverse();
+
 	//overloading opperators
 	//addition
 	Vector3D operator+(Vector3D _vector);
