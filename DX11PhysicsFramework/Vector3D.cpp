@@ -46,17 +46,16 @@ float Vector3D::Magnitude()
 	return magnitude;
 }
 
-Vector3D Vector3D::Normalize(Vector3D _vector)
+Vector3D Vector3D::Normalize()
 {
 	float vectorMag = Magnitude();
 
 	if (vectorMag == 0) return Vector3D(0,0,0);
 
 	Vector3D normalizedVector = Vector3D(0,0,0);
-	normalizedVector.x = _vector.x / vectorMag;
-	normalizedVector.y = _vector.y / vectorMag;
-	normalizedVector.z = _vector.z / vectorMag;
-	
+	normalizedVector.x = this->x / vectorMag;
+	normalizedVector.y = this->y / vectorMag;
+	normalizedVector.z = this->z / vectorMag;	
 
 	return normalizedVector;
 }
@@ -110,6 +109,12 @@ bool Vector3D::operator==(Vector3D _vector)
 	else return false;
 }
 
+bool Vector3D::operator==(float _scalar)
+{
+	if (this->x == _scalar && this->y == _scalar && this->z == _scalar) return true;
+	else return false;
+}
+
 void Vector3D::operator+=(Vector3D _vector)
 {
 	this->x += _vector.x;
@@ -145,9 +150,21 @@ bool Vector3D::operator>(Vector3D _vector)
 	else return false;
 }
 
+bool Vector3D::operator>(float _scalar)
+{
+	if (this->x > _scalar && this->y > _scalar && this->z > _scalar) return true;
+	else return false;
+}
+
 bool Vector3D::operator<(Vector3D _vector)
 {
 	if (this->x < _vector.x && this->y < _vector.y && this->z < _vector.z) return true;
+	else return false;
+}
+
+bool Vector3D::operator<(float _scalar)
+{
+	if (this->x < _scalar && this->y < _scalar && this->z < _scalar) return true;
 	else return false;
 }
 

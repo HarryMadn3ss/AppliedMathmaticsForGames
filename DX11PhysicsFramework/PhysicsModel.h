@@ -37,6 +37,8 @@ public:
 	void SetAcclerationValue(Vector3D acceleration) { _acclerationValue = acceleration; }
 	/*void SetIsAccleration(bool isAcclerating) { _constantAcceleration = isAcclerating; }*/
 
+	float GetMass() { return _mass; }
+
 	void AddForce(Vector3D force) { _netForce += force; }
 	Vector3D GravityForce() { return Vector3D(0, -9.81 * _mass, 0); }
 	Vector3D DragForce();

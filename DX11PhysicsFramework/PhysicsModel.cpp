@@ -72,7 +72,7 @@ Vector3D PhysicsModel::DragForce()
 		_dragValue = _mass * 9.81;
 	}	
 
-	Vector3D finalDrag = velCopy.Normalize(velCopy) * -_dragValue;
+	Vector3D finalDrag = velCopy.Normalize() * -_dragValue;
 		
 	return finalDrag;
 		
@@ -85,7 +85,7 @@ Vector3D PhysicsModel::FrictionForce()
 	Vector3D velCopy = GetVelocity();
 	float mag = velCopy.Magnitude();
 	
-	Vector3D finalFriction = velCopy.Normalize(velCopy) * -_frictionValue;
+	Vector3D finalFriction = velCopy.Normalize() * -_frictionValue;
 
 	//if (finalFriction > (velCopy * -1))
 	//{

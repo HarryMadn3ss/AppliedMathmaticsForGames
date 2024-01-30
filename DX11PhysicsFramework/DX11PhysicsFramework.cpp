@@ -626,7 +626,18 @@ void DX11PhysicsFramework::Update()
 
 				DebugClass::Instance()->PrintDebugString("Collision");
 
-				
+
+				Vector3D collisionNormal = (_gameObjects[1]->_transform->GetPosition() - _gameObjects[2]->_transform->GetPosition()).Normalize();
+				Vector3D relVelocity = _gameObjects[1]->_physicsModel->GetVelocity() - _gameObjects[2]->_physicsModel->GetVelocity();
+				float restitution = 1; //change to a get
+				//if both objects are approching each other
+				if (Vector3D::DotProduct(collisionNormal, relVelocity) < 0.0f)
+				{
+					Vector3D vj =  (collisionNormal * -(1 + restitution)) * relVelocity;
+					Vector3D j = vj / (-_gameObjects[1]->_physicsModel->GetMass() + -_gameObjects[2]->_physicsModel->GetMass());
+					_gameObjects[1]->_physicsModel->ApplyImpulse((j * -_gameObjects[1]->_physicsModel->GetMass()) * collisionNormal);
+					_gameObjects[2]->_physicsModel->ApplyImpulse((j * -(-_gameObjects[1]->_physicsModel->GetMass())) * collisionNormal);
+				}
 			}
 		}
 

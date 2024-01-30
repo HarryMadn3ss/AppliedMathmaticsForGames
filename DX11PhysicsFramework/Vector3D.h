@@ -24,12 +24,12 @@ public:
 	Vector3D Zero();
 
 	//cros and dot product
-	float DotProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
-	Vector3D CrossProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
+	static float DotProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
+	static Vector3D CrossProduct(Vector3D _vectorOne, Vector3D _vectorTwo);
 
 	//magnitude and nomalization
 	float Magnitude();
-	Vector3D Normalize(Vector3D _vector);
+	Vector3D Normalize();
 
 	//overloading opperators
 	//addition
@@ -42,6 +42,7 @@ public:
 	//copy/equals
 	void operator=(Vector3D _vector);
 	bool operator==(Vector3D _vector);
+	bool operator==(float _scalar);
 	void operator+=(Vector3D _vector);
 	//division
 	/*Vector3D operator/(Vector3D _vector);*/
@@ -49,6 +50,8 @@ public:
 
 	bool operator!=(Vector3D _vector);
 	bool operator>(Vector3D _vector);
+	bool operator>(float _scalar);
 	bool operator<(Vector3D _vector);
+	bool operator<(float _scalar);
 };
 
