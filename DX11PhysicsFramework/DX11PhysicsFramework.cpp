@@ -644,13 +644,13 @@ void DX11PhysicsFramework::Update()
 
 					float pointDist = (pointBoxOne - pointBoxTwo).Magnitude();
 
-					_gameObjects[1]->_transform->SetPosition(_gameObjects[1]->_transform->GetPosition() + collisionNormal * pointDist * (1 / _gameObjects[1]->_physicsModel->GetMass()));
-					_gameObjects[2]->_transform->SetPosition(_gameObjects[2]->_transform->GetPosition() + collisionNormal * -pointDist * (1 /_gameObjects[2]->_physicsModel->GetMass()));
+					_gameObjects[1]->_transform->SetPosition(_gameObjects[1]->_transform->GetPosition() + (collisionNormal * pointDist * (1 / _gameObjects[1]->_physicsModel->GetMass())));
+					_gameObjects[2]->_transform->SetPosition(_gameObjects[2]->_transform->GetPosition() + (collisionNormal * -pointDist * (1 /_gameObjects[2]->_physicsModel->GetMass())));
 
-					Vector3D vj =  (collisionNormal * -(1 + restitution)) * relVelocity;
-					Vector3D j = vj / ((1/ _gameObjects[1]->_physicsModel->GetMass()) + (1/ _gameObjects[2]->_physicsModel->GetMass()));
-					_gameObjects[1]->_physicsModel->ApplyImpulse((j * (1/_gameObjects[1]->_physicsModel->GetMass())) * collisionNormal);
-					_gameObjects[2]->_physicsModel->ApplyImpulse((j * -(1/ _gameObjects[1]->_physicsModel->GetMass())) * collisionNormal);
+					float vj =  Vector3D::DotProduct((collisionNormal * -(1 + restitution)), relVelocity);
+					float j = vj / ((1/ _gameObjects[1]->_physicsModel->GetMass()) + (1/ _gameObjects[2]->_physicsModel->GetMass()));
+					_gameObjects[1]->_physicsModel->ApplyImpulse(collisionNormal * (j * (1/_gameObjects[1]->_physicsModel->GetMass())));
+					_gameObjects[2]->_physicsModel->ApplyImpulse(collisionNormal * (j * -(1/ _gameObjects[1]->_physicsModel->GetMass())) );
 				}
 			}
 		}
