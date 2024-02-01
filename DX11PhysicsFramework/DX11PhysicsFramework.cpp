@@ -612,6 +612,15 @@ void DX11PhysicsFramework::Update()
 
 	_timer.Tick();
 
+#ifdef _DEBUG
+	//assume we've come back from breakpoint
+	if (accumulator > 1.0f)
+	{
+		accumulator = 0.18f;
+	}
+#endif 
+
+
 	//all motion and object updates go in this while
 	while (accumulator >= FPS60)
 	{
@@ -624,33 +633,40 @@ void DX11PhysicsFramework::Update()
 				/*_gameObjects[1]->_physicsModel->ApplyImpulse(Vector3D(-1, 0, 0));
 				_gameObjects[2]->_physicsModel->ApplyImpulse(Vector3D(1, 0, 0));*/
 
-				DebugClass::Instance()->PrintDebugString("Collision");
+				//DebugClass::Instance()->PrintDebugString("Collision");
 
 
 				Vector3D collisionNormal = (_gameObjects[1]->_transform->GetPosition() - _gameObjects[2]->_transform->GetPosition()).Normalize();
 				Vector3D relVelocity = _gameObjects[1]->_physicsModel->GetVelocity() - _gameObjects[2]->_physicsModel->GetVelocity();
 				float restitution = 1; //change to a get
 				//if both objects are approching each other
+
 				if (Vector3D::DotProduct(collisionNormal, relVelocity) < 0.0f)
 				{
 					float distance = (_gameObjects[1]->_transform->GetPosition() - _gameObjects[2]->_transform->GetPosition()).Magnitude();
+
 					AABBCollider* boxOne = (AABBCollider*)_gameObjects[1]->_physicsModel->GetCollider();
 					Vector3D halfExtentsBoxOne = boxOne->GetHalfExtents();
 					AABBCollider* boxTwo = (AABBCollider*)_gameObjects[2]->_physicsModel->GetCollider();
-					Vector3D halfExtentsBoxTwo = boxOne->GetHalfExtents();
-					//clamp
-					Vector3D pointBoxOne = _gameObjects[2]->_transform->GetPosition().Clamp(halfExtentsBoxOne, halfExtentsBoxOne.Inverse());
-					Vector3D pointBoxTwo = _gameObjects[1]->_transform->GetPosition().Clamp(halfExtentsBoxTwo, halfExtentsBoxTwo.Inverse());
+					Vector3D halfExtentsBoxTwo = boxTwo->GetHalfExtents();
 
-					float pointDist = (pointBoxOne - pointBoxTwo).Magnitude();
+					if ((_gameObjects[2]->_transform->GetPosition() - _gameObjects[1]->_transform->GetPosition()).Magnitude() <= (halfExtentsBoxOne + halfExtentsBoxTwo).Magnitude())
+					{
+						//clamp
+						Vector3D pointBoxOne = _gameObjects[2]->_transform->GetPosition().Clamp(_gameObjects[1]->_transform->GetPosition() + halfExtentsBoxOne, _gameObjects[1]->_transform->GetPosition() +halfExtentsBoxOne.Inverse());					
+						Vector3D pointBoxTwo = _gameObjects[1]->_transform->GetPosition().Clamp(_gameObjects[2]->_transform->GetPosition() + halfExtentsBoxOne, _gameObjects[2]->_transform->GetPosition() + halfExtentsBoxOne.Inverse());
+						float pointDist = (pointBoxTwo - pointBoxOne).Magnitude();
+												
+						Vector3D distToMove = collisionNormal * pointDist * (1 / _gameObjects[1]->_physicsModel->GetMass()) * (1 / _gameObjects[2]->_physicsModel->GetMass());
 
-					_gameObjects[1]->_transform->SetPosition(_gameObjects[1]->_transform->GetPosition() + (collisionNormal * pointDist * (1 / _gameObjects[1]->_physicsModel->GetMass())));
-					_gameObjects[2]->_transform->SetPosition(_gameObjects[2]->_transform->GetPosition() + (collisionNormal * -pointDist * (1 /_gameObjects[2]->_physicsModel->GetMass())));
-
+						_gameObjects[1]->_transform->SetPosition(_gameObjects[1]->_transform->GetPosition() + distToMove);
+						_gameObjects[2]->_transform->SetPosition(_gameObjects[2]->_transform->GetPosition() + distToMove.Inverse());
+					}
+					
 					float vj =  Vector3D::DotProduct((collisionNormal * -(1 + restitution)), relVelocity);
 					float j = vj / ((1/ _gameObjects[1]->_physicsModel->GetMass()) + (1/ _gameObjects[2]->_physicsModel->GetMass()));
 					_gameObjects[1]->_physicsModel->ApplyImpulse(collisionNormal * (j * (1/_gameObjects[1]->_physicsModel->GetMass())));
-					_gameObjects[2]->_physicsModel->ApplyImpulse(collisionNormal * (j * -(1/ _gameObjects[1]->_physicsModel->GetMass())) );
+					_gameObjects[2]->_physicsModel->ApplyImpulse(collisionNormal * (j * -(1/ _gameObjects[1]->_physicsModel->GetMass())));
 				}
 			}
 		}

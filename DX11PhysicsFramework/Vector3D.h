@@ -38,6 +38,7 @@ public:
 	//overloading opperators
 	//addition
 	Vector3D operator+(Vector3D _vector);
+	Vector3D operator+(float _scalar);
 	//sub
 	Vector3D operator-(Vector3D _vector);
 	//multiplcation
