@@ -5,7 +5,7 @@
 #include <string>
 
 #include "DebugClass.h"
-#include "Vector3D.h"
+#include "Quaternion.h"
 #include "Transform.h"
 #include "Appearance.h"
 //#include "PhysicsModel.h"
@@ -68,7 +68,8 @@ private:
 	GameObject* _parent = nullptr;
 
 	Vector3D _position;
-	Vector3D _rotation;
+	//Vector3D _rotation;
+
 	Vector3D _scale;
 
 	string _type;

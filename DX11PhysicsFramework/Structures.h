@@ -4,6 +4,7 @@
 #include <directxmath.h>
 
 #define FPS60 1.0f/60.0f
+#define PI 3.14159265359f
 
 using namespace DirectX;
 

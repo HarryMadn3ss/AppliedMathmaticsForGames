@@ -1,8 +1,10 @@
 #include "AABBCollider.h"
+#include "SphereCollider.h"
 
 bool AABBCollider::CollidesWith(SphereCollider& other)
 {
-	return false;
+	if (other.CollidesWith(other)) return true;
+	else return false;
 }
 
 bool AABBCollider::CollidesWith(AABBCollider& other)
