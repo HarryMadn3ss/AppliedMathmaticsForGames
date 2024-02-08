@@ -522,7 +522,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	gameObject->_transform = _transformFloor;
 	gameObject->_transform->SetPosition(Vector3D(0.0f, 0.0f, 0.0f));
 	gameObject->_transform->SetScale(Vector3D(15.0f, 15.0f, 15.0f));
-	gameObject->_transform->SetRotation(Vector3D(XMConvertToRadians(90.0f), 0.0f, 0.0f));
+	gameObject->_transform->SetRotation(90.0f, 0.0f, 0.0f);
 	gameObject->SetTextureRV(_GroundTextureRV);
 	
 
@@ -700,6 +700,14 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('4'))
 		{
 			_gameObjects[2]->MoveBackward();
+		}
+		if (GetAsyncKeyState('Q'))
+		{
+			_gameObjects[1]->_physicsModel->AddRelativeForce(Vector3D(1, 0, -1), Vector3D(0, -50, 0));
+		}
+		if (GetAsyncKeyState('E'))
+		{
+			_gameObjects[1]->_physicsModel->AddRelativeForce(Vector3D(1, 0, -1), Vector3D(0, 50, 0));
 		}
 		// Update camera
 		float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);

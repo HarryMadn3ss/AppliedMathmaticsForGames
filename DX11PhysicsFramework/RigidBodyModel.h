@@ -3,14 +3,21 @@
 
 class RigidBodyModel : public PhysicsModel
 {
-private:
-
-
+private:	
+	Transform* _transform;
+	
+	
 protected:
 
 
 public:
-	RigidBodyModel(Transform* transform, float mass) : PhysicsModel(transform, mass) {};
+	RigidBodyModel(Transform* transform, float mass) : PhysicsModel(transform, mass) 
+	{
+		_transform = transform;
 
+		Vector3D pos = _transform->GetPosition();
+	};
+
+	void AddRelativeForce(Vector3D impactPoint, Vector3D force) override;
 };
 

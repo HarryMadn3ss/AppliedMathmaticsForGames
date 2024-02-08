@@ -3,12 +3,22 @@
 
 PhysicsModel::PhysicsModel()
 {
+
 }
 
 PhysicsModel::PhysicsModel(Transform* transform, float mass)
 {
 	_transform = transform;
 	_mass = mass;
+
+
+
+	XMStoreFloat3x3(&_ineriaTensor, XMMatrixIdentity());
+
+	//todo change ones to half extents
+	_ineriaTensor._11 = (1.0f / 12.0f) * mass * ((1 * 1) + (1 * 1));
+	_ineriaTensor._22 = (1.0f / 12.0f) * mass * ((1 * 1) + (1 * 1));
+	_ineriaTensor._33 = (1.0f / 12.0f) * mass * ((1 * 1) + (1 * 1));
 }
 
 PhysicsModel::~PhysicsModel()
@@ -50,9 +60,13 @@ void PhysicsModel::Update(float deltaTime)
 
 	_acclerationValue += _netForce / _mass;
 	_velocity = _velocity + _acclerationValue * deltaTime;	
+
+	CalculateAngularVelocity(deltaTime);
+
 	position += _velocity * deltaTime;
 	
-	_transform->SetPosition(position);
+	_transform->SetPosition(position);	
+
 
 	_acclerationValue = Vector3D(0, 0, 0);
 	_netForce = Vector3D(0, 0, 0);	
@@ -102,4 +116,33 @@ Vector3D PhysicsModel::FrictionForce()
 	}
 
 	return finalFriction;
+}
+
+void PhysicsModel::CalculateAngularVelocity(float deltaTime)
+{
+	//XMMATRIX inverseTensor = ;
+	XMMATRIX inverseTensor = XMMatrixInverse(nullptr, XMLoadFloat3x3(&_ineriaTensor));
+
+	XMVECTOR torque = XMVectorSet(_torque.x, _torque.y, _torque.z, 1);
+	_torque = Vector3D();
+	XMVECTOR torqueMatrix = XMVector3Transform(torque, inverseTensor);
+	XMFLOAT3 accFloat;
+	XMStoreFloat3(&accFloat, torqueMatrix);
+
+	Vector3D angularAcc = Vector3D(accFloat.x, accFloat.y, accFloat.z);
+
+	_angularVelocity += angularAcc * deltaTime;
+
+	Quaternion orientation = _transform->GetOrientation();
+
+	orientation += orientation * _angularVelocity * (1.0f / 2.0f) * deltaTime;
+
+	if (orientation.Magnitude() != 0)
+	{
+		orientation /= orientation.Magnitude();
+	}
+
+	_transform->SetOrientation(orientation);
+
+	_angularVelocity *= pow(_angularDampening, deltaTime);	
 }

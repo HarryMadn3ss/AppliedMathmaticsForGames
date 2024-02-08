@@ -17,5 +17,7 @@ public:
 
 	void Update(float deltaTime);
 	void Reset();
+
+	void AddRelativeForce(Vector3D impactPoint, Vector3D force) override { AddForce(force); }
 };
 

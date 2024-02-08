@@ -158,6 +158,20 @@ void Vector3D::operator+=(Vector3D _vector)
 	this->z += _vector.z;
 }
 
+void Vector3D::operator+=(float _scalar)
+{
+	this->x += _scalar;
+	this->y += _scalar;
+	this->z += _scalar;
+}
+
+void Vector3D::operator*=(float _scalar)
+{
+	this->x *= _scalar;
+	this->y *= _scalar;
+	this->z *= _scalar;
+}
+
 //void Vector3D::operator/(Vector3D _vector)
 //{
 //	this->x = this->x / _vector.x;

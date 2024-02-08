@@ -69,6 +69,7 @@ private:
 
 	Vector3D _position;
 	//Vector3D _rotation;
+	Quaternion _orientation;
 
 	Vector3D _scale;
 

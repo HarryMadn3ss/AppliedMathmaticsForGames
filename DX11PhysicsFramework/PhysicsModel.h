@@ -7,9 +7,13 @@
 class PhysicsModel
 {
 private:
-	
 
 protected:
+	XMFLOAT3X3 _ineriaTensor;
+	float _angularDampening = 0.1f;
+	Vector3D _angularVelocity = Vector3D();
+	Vector3D _torque = Vector3D();
+
 	Transform* _transform = nullptr;
 	Vector3D _velocity = Vector3D(0, 0, 0);
 
@@ -50,5 +54,9 @@ public:
 
 	//collision reposne
 	void ApplyImpulse(Vector3D impulse){ _velocity += impulse; }
+
+	virtual void AddRelativeForce(Vector3D impactPoint, Vector3D force) = 0;
+
+	void CalculateAngularVelocity(float deltaTime);
 };
 
