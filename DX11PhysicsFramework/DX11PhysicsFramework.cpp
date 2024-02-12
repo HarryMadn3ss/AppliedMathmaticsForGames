@@ -643,12 +643,15 @@ void DX11PhysicsFramework::Update()
 
 				if (Vector3D::DotProduct(collisionNormal, relVelocity) < 0.0f)
 				{
+
+					//todo oreinted bb https://learning.oreilly.com/library/view/real-time-collision-detection/9781558607323/xhtml/c04.xhtml#sec4_4
 					float distance = (_gameObjects[1]->_transform->GetPosition() - _gameObjects[2]->_transform->GetPosition()).Magnitude();
 
 					AABBCollider* boxOne = (AABBCollider*)_gameObjects[1]->_physicsModel->GetCollider();
 					Vector3D halfExtentsBoxOne = boxOne->GetHalfExtents();
 					AABBCollider* boxTwo = (AABBCollider*)_gameObjects[2]->_physicsModel->GetCollider();
 					Vector3D halfExtentsBoxTwo = boxTwo->GetHalfExtents();
+
 
 					if ((_gameObjects[2]->_transform->GetPosition() - _gameObjects[1]->_transform->GetPosition()).Magnitude() <= (halfExtentsBoxOne + halfExtentsBoxTwo).Magnitude())
 					{
@@ -708,6 +711,10 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('E'))
 		{
 			_gameObjects[1]->_physicsModel->AddRelativeForce(Vector3D(1, 0, -1), Vector3D(0, 50, 0));
+		}
+		if (GetAsyncKeyState('K'))
+		{
+			_gameObjects[2]->MoveLeft();
 		}
 		// Update camera
 		float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);
