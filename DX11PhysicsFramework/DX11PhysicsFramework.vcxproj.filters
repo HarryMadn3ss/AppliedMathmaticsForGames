@@ -39,6 +39,7 @@
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="OBBCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11PhysicsFramework.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="AABBCollider.cpp" />
+    <ClCompile Include="OBBCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

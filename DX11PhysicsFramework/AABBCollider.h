@@ -21,6 +21,7 @@ public:
 	virtual bool CollidesWith(Collider& other) override { return other.CollidesWith(*this); }
 	virtual bool CollidesWith(SphereCollider& other) override;
 	virtual bool CollidesWith(AABBCollider& other) override;
+	virtual bool CollidesWith(OBBCollider& other) override;
 
 	Vector3D GetHalfExtents() { return Vector3D(_rx, _ry, _rz); }
 

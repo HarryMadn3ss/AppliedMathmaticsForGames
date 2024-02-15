@@ -1,24 +1,20 @@
 #pragma once
 #include "Collider.h"
-#include "AABBCollider.h"
-
-
-class SphereCollider :  public Collider
+class OBBCollider :	public Collider
 {
 private:
-	float _radius = 1.0f;
+	
 
 protected:
-
-
+	Vector3D _center;
+	Vector3D _halfExtents;
+	Vector3D _up, _forward;
 public:
-	SphereCollider(Transform* transform, float radius) : Collider(transform) { _radius = radius; }
+	OBBCollider(Transform* transform, Vector3D extents) : Collider(transform) { _halfExtents = extents, _center = GetPosition(); }
 
 	virtual bool CollidesWith(Collider& other) override { return other.CollidesWith(*this); }
 	virtual bool CollidesWith(SphereCollider& other) override;
 	virtual bool CollidesWith(AABBCollider& other) override;
 	virtual bool CollidesWith(OBBCollider& other) override;
-
-	float GetRadius() const { return _radius; }
 };
 

@@ -19,3 +19,8 @@ bool AABBCollider::CollidesWith(AABBCollider& other)
 	if (combindedRX > distanceMag && combindedRY > distanceMag && combindedRZ > distanceMag) return true;
 	else return false;
 }
+
+bool AABBCollider::CollidesWith(OBBCollider& other)
+{
+	return false;
+}
