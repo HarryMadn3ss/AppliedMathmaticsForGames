@@ -36,7 +36,7 @@ void GameObject::Update(float dt)
 
 	//XMMATRIX rotation = XMMatrixRotationX(_transform->GetRotation().x) * XMMatrixRotationY(_transform->GetRotation().y) * XMMatrixRotationZ(_transform->GetRotation().z);
 	XMMATRIX oreintation = XMMatrixRotationQuaternion(XMVectorSet(_transform->GetOrientation().GetVector().x, _transform->GetOrientation().GetVector().y, _transform->GetOrientation().GetVector().z, _transform->GetOrientation().n));
-
+	
 	XMMATRIX translation = XMMatrixTranslation(_transform->GetPosition().x, _transform->GetPosition().y, _transform->GetPosition().z);
 
 	XMStoreFloat4x4(&_world, scale * oreintation * translation);
@@ -48,6 +48,8 @@ void GameObject::Update(float dt)
 		
 	if (_physicsModel != nullptr)
 	{
+		OBBCollider* collider = (OBBCollider*)_physicsModel->GetCollider();
+		collider->SetNormals(Vector3D(_world._11, _world._12, _world._13), Vector3D(_world._21, _world._22, _world._23), Vector3D(_world._31, _world._32, _world._33));
 		_physicsModel->Update(dt);
 	}
 

@@ -218,6 +218,27 @@ bool Vector3D::operator<(float _scalar)
 	else return false;
 }
 
+float Vector3D::operator[](int _selector)
+{
+	Vector3D temp = Vector3D(this->x, this->y, this->z);
+	if (_selector == 0)
+	{
+		return temp.x;
+	}
+	else if (_selector == 1)
+	{
+		return temp.y;
+	}
+	else if (_selector == 2)
+	{
+		return temp.z;
+	}
+	else return false;
+	
+
+	
+}
+
 
 
 

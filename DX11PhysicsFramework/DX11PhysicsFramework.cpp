@@ -542,7 +542,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		gameObject->SetTextureRV(_StoneTextureRV);
 		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f);
 		gameObject->_physicsModel = _physicsModelCube;
-		AABBCollider* _colliderCube = new AABBCollider(_transformCube, Vector3D(2.0f, 2.0f, 2.0f));
+		OBBCollider* _colliderCube = new OBBCollider(_transformCube, Vector3D(2.0f, 2.0f, 2.0f));
 		gameObject->_physicsModel->SetCollider(_colliderCube);
 		_gameObjects.push_back(gameObject);
 	}
@@ -647,9 +647,9 @@ void DX11PhysicsFramework::Update()
 					//todo oreinted bb https://learning.oreilly.com/library/view/real-time-collision-detection/9781558607323/xhtml/c04.xhtml#sec4_4
 					float distance = (_gameObjects[1]->_transform->GetPosition() - _gameObjects[2]->_transform->GetPosition()).Magnitude();
 
-					AABBCollider* boxOne = (AABBCollider*)_gameObjects[1]->_physicsModel->GetCollider();
+					OBBCollider* boxOne = (OBBCollider*)_gameObjects[1]->_physicsModel->GetCollider();
 					Vector3D halfExtentsBoxOne = boxOne->GetHalfExtents();
-					AABBCollider* boxTwo = (AABBCollider*)_gameObjects[2]->_physicsModel->GetCollider();
+					OBBCollider* boxTwo = (OBBCollider*)_gameObjects[2]->_physicsModel->GetCollider();
 					Vector3D halfExtentsBoxTwo = boxTwo->GetHalfExtents();
 
 

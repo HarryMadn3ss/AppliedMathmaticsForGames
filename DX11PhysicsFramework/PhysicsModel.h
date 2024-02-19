@@ -2,7 +2,7 @@
 
 #include "Transform.h"
 #include "SphereCollider.h"
-#include "AABBCollider.h"
+#include "OBBCollider.h"
 
 class PhysicsModel
 {

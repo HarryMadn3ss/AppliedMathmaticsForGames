@@ -60,5 +60,6 @@ public:
 	bool operator>(float _scalar);
 	bool operator<(Vector3D _vector);
 	bool operator<(float _scalar);
+	float operator[](int _selector);
 };
 

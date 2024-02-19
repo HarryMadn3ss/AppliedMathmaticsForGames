@@ -1,4 +1,5 @@
 #include "SphereCollider.h"
+#include "OBBCollider.h"
 
 bool SphereCollider::CollidesWith(SphereCollider& other)
 {
@@ -29,4 +30,9 @@ bool SphereCollider::CollidesWith(AABBCollider& other)
         return true;
     }
     else return false;
+}
+
+bool SphereCollider::CollidesWith(OBBCollider& other)
+{
+    return false;
 }
