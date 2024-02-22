@@ -28,6 +28,8 @@ PhysicsModel::~PhysicsModel()
 
 void PhysicsModel::Update(float deltaTime)
 {
+	if (_mass == 0) return;	
+
 	Vector3D position = _transform->GetPosition();	
 
 
@@ -120,6 +122,8 @@ Vector3D PhysicsModel::FrictionForce()
 
 void PhysicsModel::CalculateAngularVelocity(float deltaTime)
 {
+	if (_mass == 0) return;
+
 	//XMMATRIX inverseTensor = ;
 	XMMATRIX inverseTensor = XMMatrixInverse(nullptr, XMLoadFloat3x3(&_ineriaTensor));
 

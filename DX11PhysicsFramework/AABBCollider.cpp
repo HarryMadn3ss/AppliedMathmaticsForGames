@@ -2,13 +2,13 @@
 #include "OBBCollider.h"
 #include "SphereCollider.h"
 
-bool AABBCollider::CollidesWith(SphereCollider& other)
+bool AABBCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
-	if (other.CollidesWith(other)) return true;
+	if (other.CollidesWith(other, out)) return true;
 	else return false;
 }
 
-bool AABBCollider::CollidesWith(AABBCollider& other)
+bool AABBCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
 {
 	Vector3D distance = other.GetPosition() - this->GetPosition();
 	float distanceMag = distance.Magnitude();
@@ -21,7 +21,7 @@ bool AABBCollider::CollidesWith(AABBCollider& other)
 	else return false;
 }
 
-bool AABBCollider::CollidesWith(OBBCollider& other)
+bool AABBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 {
 	return false;
 }

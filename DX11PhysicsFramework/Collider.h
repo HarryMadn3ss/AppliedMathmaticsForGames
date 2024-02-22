@@ -19,10 +19,10 @@ public:
 	Collider(Transform* transform) { _transform = transform; }
 	
 
-	virtual bool CollidesWith(Collider& other) = 0;
-	virtual bool CollidesWith(SphereCollider& other) = 0;
-	virtual bool CollidesWith(AABBCollider& other) = 0;
-	virtual bool CollidesWith(OBBCollider& other) = 0;
+	virtual bool CollidesWith(Collider& other, CollisionManifold& out) = 0;
+	virtual bool CollidesWith(SphereCollider& other, CollisionManifold& out) = 0;
+	virtual bool CollidesWith(AABBCollider& other, CollisionManifold& out) = 0;
+	virtual bool CollidesWith(OBBCollider& other, CollisionManifold& out) = 0;
 
 	Vector3D GetPosition() const { return _transform->GetPosition(); }
 

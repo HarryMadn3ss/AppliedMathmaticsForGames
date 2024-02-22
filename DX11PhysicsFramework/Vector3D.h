@@ -34,6 +34,7 @@ public:
 	//other
 	Vector3D Clamp(Vector3D max, Vector3D min);
 	Vector3D Inverse();
+	static char FindAxis(Vector3D posA, Vector3D posB);
 
 	//overloading opperators
 	//addition

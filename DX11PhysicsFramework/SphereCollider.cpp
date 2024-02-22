@@ -1,7 +1,7 @@
 #include "SphereCollider.h"
 #include "OBBCollider.h"
 
-bool SphereCollider::CollidesWith(SphereCollider& other)
+bool SphereCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
     Vector3D distance = other.GetPosition() - this->GetPosition();
     float distanceMagnitude = distance.Magnitude();
@@ -17,7 +17,7 @@ bool SphereCollider::CollidesWith(SphereCollider& other)
     }
 }
 
-bool SphereCollider::CollidesWith(AABBCollider& other)
+bool SphereCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
 {
     Vector3D distance = other.GetPosition() - GetPosition();
 
@@ -32,7 +32,7 @@ bool SphereCollider::CollidesWith(AABBCollider& other)
     else return false;
 }
 
-bool SphereCollider::CollidesWith(OBBCollider& other)
+bool SphereCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 {
     return false;
 }

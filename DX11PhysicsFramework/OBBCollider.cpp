@@ -2,21 +2,44 @@
 #include "AABBCollider.h"
 #include "SphereCollider.h"
 
-bool OBBCollider::CollidesWith(SphereCollider& other)
+bool OBBCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
-    if (other.CollidesWith(other)) return true;
+    if (other.CollidesWith(other, out)) return true;
     else return false;    
 }
 
-bool OBBCollider::CollidesWith(AABBCollider& other)
+bool OBBCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
 {
     return false;
 }
 
-bool OBBCollider::CollidesWith(OBBCollider& other)
+bool OBBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 {
     float boxOneRadius, boxTwoRadius;
     XMFLOAT3X3 rotationMatrix, absRotationMatrix;
+    
+    Vector3D diff =  other.GetPosition() - this->GetPosition();
+    float distance = (diff).Magnitude();
+    
+    Vector3D halfExtentsObjA = this->GetHalfExtents();    
+    Vector3D halfExtentsObjB = other.GetHalfExtents();
+
+    if (distance < (halfExtentsObjA + halfExtentsObjB).Magnitude())
+    {
+        //clamp
+        Vector3D pointBoxOne = other.GetPosition().Clamp(this->GetPosition() + halfExtentsObjB, this->GetPosition() + halfExtentsObjB.Inverse());
+        Vector3D pointBoxTwo = this->GetPosition().Clamp(other.GetPosition() + halfExtentsObjA, other.GetPosition() + halfExtentsObjA.Inverse());
+        float pointADist = (pointBoxTwo - pointBoxOne).Magnitude();
+        float pointBDist = (pointBoxOne - pointBoxTwo).Magnitude();
+
+        out.collisionNormal = diff.Normalize();
+        //out.collisionNormal.Normalize();
+        out.contactPointCount = 2;
+        out.points[0].position = pointBoxOne;        
+        out.points[0].penetrationDepth = pointADist;
+        out.points[1].position = pointBoxTwo;
+        out.points[1].penetrationDepth = -pointBDist;
+    }
 
     // compoute rotation expressing b in a's corrd frame
     for (int i = 0; i < 3; i++)

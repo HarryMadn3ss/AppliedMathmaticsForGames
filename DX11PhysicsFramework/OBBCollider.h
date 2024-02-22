@@ -13,10 +13,10 @@ protected:
 public:
 	OBBCollider(Transform* transform, Vector3D extents) : Collider(transform) { _halfExtents = extents/2, _center = GetPosition(); }
 
-	virtual bool CollidesWith(Collider& other) override { return other.CollidesWith(*this); }
-	virtual bool CollidesWith(SphereCollider& other) override;
-	virtual bool CollidesWith(AABBCollider& other) override;
-	virtual bool CollidesWith(OBBCollider& other) override;
+	virtual bool CollidesWith(Collider& other, CollisionManifold& out) override { return other.CollidesWith(*this, out); }
+	virtual bool CollidesWith(SphereCollider& other, CollisionManifold& out) override;
+	virtual bool CollidesWith(AABBCollider& other, CollisionManifold& out) override;
+	virtual bool CollidesWith(OBBCollider& other, CollisionManifold& out) override;
 
 	Vector3D GetHalfExtents() { return _halfExtents; }
 

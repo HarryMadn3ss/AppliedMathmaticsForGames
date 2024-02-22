@@ -2,6 +2,7 @@
 #include <cstring>
 #include <d3d11.h>
 #include <directxmath.h>
+#include "Vector3D.h"
 
 #define FPS60 1.0f/60.0f
 #define PI 3.14159265359f
@@ -75,4 +76,17 @@ struct Material
 	XMFLOAT4 diffuse;
 	XMFLOAT4 ambient;
 	XMFLOAT4 specular;
+};
+
+struct ContactPoint
+{
+	Vector3D position;
+	float penetrationDepth = 0;
+};
+
+struct CollisionManifold 
+{
+	int contactPointCount = 0;
+	ContactPoint points[4];
+	Vector3D collisionNormal;
 };

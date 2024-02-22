@@ -18,6 +18,8 @@ public:
 		Vector3D pos = _transform->GetPosition();
 	};
 
+	void Update(float deltaTime);
+
 	void AddRelativeForce(Vector3D impactPoint, Vector3D force) override;
 };
 

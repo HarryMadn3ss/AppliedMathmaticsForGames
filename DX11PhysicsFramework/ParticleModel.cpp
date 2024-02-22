@@ -17,6 +17,8 @@ ParticleModel::~ParticleModel()
 
 void ParticleModel::Update(float deltaTime)
 {
+	PhysicsModel::Update(deltaTime);
+
 	_timeAlive += deltaTime;
 	if (_timeAlive > _resetTime)
 	{

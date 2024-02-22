@@ -87,6 +87,15 @@ Vector3D Vector3D::Inverse()
 	return inversed;
 }
 
+char Vector3D::FindAxis(Vector3D posA, Vector3D posB)
+{
+	Vector3D dist = posB - posA;
+
+	if (abs(dist.x) > abs(dist.y) && abs(dist.x) > abs(dist.z)) return 'x';
+	if (abs(dist.y) > abs(dist.x) && abs(dist.y) > abs(dist.z)) return 'y';
+	if (abs(dist.z) > abs(dist.y) && abs(dist.z) > abs(dist.x)) return 'z';
+}
+
 Vector3D Vector3D::operator+(Vector3D _vector)
 {
 	Vector3D addedVectors;
