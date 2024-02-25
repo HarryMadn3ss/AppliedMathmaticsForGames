@@ -9,8 +9,10 @@ private:
 	bool _invertGravity;
 
 protected:
+	bool isActive = false;
 
 public:
+	ParticleModel();
 	ParticleModel(Transform* transform, float mass) : PhysicsModel(transform, mass) {};
 	ParticleModel(Transform* transform,  Vector3D pertubation, float resetTime, bool invertGravity);
 	~ParticleModel();
@@ -19,5 +21,10 @@ public:
 	void Reset();
 
 	void AddRelativeForce(Vector3D impactPoint, Vector3D force) override { AddForce(force); }
+
+	float GetResetTime() { return _resetTime; }
+	void SetResetTime(float i) { _resetTime = i; }
+	Transform* GetTransform() { return _transform; }
+	bool GetActive() { return isActive; }
 };
 

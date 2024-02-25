@@ -13,9 +13,9 @@ bool AABBCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
 	Vector3D distance = other.GetPosition() - this->GetPosition();
 	float distanceMag = distance.Magnitude();
 
-	float combindedRX = other._rx + this->_rx;
-	float combindedRY = other._ry + this->_ry;
-	float combindedRZ = other._rz + this->_rz;
+	float combindedRX = other.GetHalfExtents()[0] + this->GetHalfExtents()[0];
+	float combindedRY = other.GetHalfExtents()[1] + this->GetHalfExtents()[1];
+	float combindedRZ = other.GetHalfExtents()[2] + this->GetHalfExtents()[2];
 
 	if (combindedRX > distanceMag && combindedRY > distanceMag && combindedRZ > distanceMag) return true;
 	else return false;
@@ -23,5 +23,6 @@ bool AABBCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
 
 bool AABBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 {
+	if (other.CollidesWith(other, out)) return true;
 	return false;
 }

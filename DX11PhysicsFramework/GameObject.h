@@ -20,6 +20,7 @@ using namespace std;
 class GameObject
 {
 public:
+	GameObject();
 	GameObject(string type, Appearance* apearance);
 	~GameObject();
 

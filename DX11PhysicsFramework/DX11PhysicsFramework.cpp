@@ -523,6 +523,11 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	gameObject->_transform->SetPosition(Vector3D(0.0f, 0.0f, 0.0f));
 	gameObject->_transform->SetScale(Vector3D(15.0f, 15.0f, 15.0f));
 	gameObject->_transform->SetRotation(90.0f, 0.0f, 0.0f);
+	RigidBodyModel* _floorPhysicsModel = new RigidBodyModel(_transformFloor, 0.0f);
+	gameObject->_physicsModel = _floorPhysicsModel;
+	gameObject->_physicsModel->SetGravity(false);
+	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(6.0f, 0.1f, 6.0f));
+	gameObject->_physicsModel->SetCollider(_floorCollider);
 	gameObject->SetTextureRV(_GroundTextureRV);
 	
 
@@ -538,7 +543,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		Transform* _transformCube = new Transform();
 		gameObject->_transform = _transformCube;
 		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
-		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 1.0f, 10.0f));
+		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 5.0f, 10.0f));
 		gameObject->SetTextureRV(_StoneTextureRV);
 		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f);
 		gameObject->_physicsModel = _physicsModelCube;
@@ -546,6 +551,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		gameObject->_physicsModel->SetCollider(_colliderCube);
 		_gameObjects.push_back(gameObject);
 	}
+	//_gameObjects[1]->_transform->SetPosition(Vector3D(0.0f, 5.0f, 0.0f));
 	_gameObjects[3]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
 	_gameObjects[4]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
 	
@@ -722,9 +728,9 @@ void DX11PhysicsFramework::ResolveCollisions()
 {
 	//todo check all objs
 	//cube nums 1234
-	for (int l = 1; l < 5; l++)
+	for (int l = 0; l < 5; l++)
 	{
-		for (int m = 1; m < 5; m++)
+		for (int m = 0; m < 5; m++)
 		{
 			CollisionManifold manifold;
 

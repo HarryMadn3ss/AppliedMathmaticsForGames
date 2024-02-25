@@ -13,18 +13,19 @@ protected:
 	//extents
 	float _dx, _dy, _dz;
 	//half extents
-	float _rx, _ry, _rz;
+	Vector3D _halfExtents;
+	Vector3D _normalAxis[3] = { Vector3D(1,0,0), Vector3D(0,1,0), Vector3D(0,0,1) };
 
 public:
-	AABBCollider(Transform* Transform, Vector3D extents) : Collider(Transform) { _dx = extents.x, _dy = extents.y, _dz = extents.z, _rx = _dx/2, _ry = _dy/2, _rz = _dz/2, _centerPoint = GetPosition(); };
+	AABBCollider(Transform* Transform, Vector3D extents) : Collider(Transform) { _dx = extents.x, _dy = extents.y, _dz = extents.z, _halfExtents = extents/2, _centerPoint = GetPosition(); };
 
 	virtual bool CollidesWith(Collider& other, CollisionManifold& out) override { return other.CollidesWith(*this, out); }
 	virtual bool CollidesWith(SphereCollider& other, CollisionManifold& out) override;
 	virtual bool CollidesWith(AABBCollider& other, CollisionManifold& out) override;
 	virtual bool CollidesWith(OBBCollider& other, CollisionManifold& out) override;
 
-	Vector3D GetHalfExtents() { return Vector3D(_rx, _ry, _rz); }
-
+	Vector3D GetHalfExtents() { return _halfExtents; }
+	Vector3D GetNormalAxis(int i) { return _normalAxis[i]; }
 
 };
 
