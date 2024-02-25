@@ -524,13 +524,12 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	gameObject->_transform->SetScale(Vector3D(15.0f, 15.0f, 15.0f));
 	gameObject->_transform->SetRotation(90.0f, 0.0f, 0.0f);
 	gameObject->SetTextureRV(_GroundTextureRV);
-	
-
+	/*RigidBodyModel* _physicsModelFloor = new RigidBodyModel(_transformFloor, 0.0f, false);
+	gameObject->_physicsModel = _physicsModelFloor;
+	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(6.0f, 6.0f, 6.0f));
+	gameObject->_physicsModel->SetCollider(_floorCollider);*/
 	_gameObjects.push_back(gameObject);
-
-	/*Transform* _transformCube[4];
-	ParticleModel* _physicsModelCube[4];*/
-
+	
 	for (auto i = 0; i < 4; i++)
 	{
 		Appearance* _apperanceCube = new Appearance(cubeGeometry, shinyMaterial);
@@ -540,15 +539,14 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 1.0f, 10.0f));
 		gameObject->SetTextureRV(_StoneTextureRV);
-		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f);
+		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f, true);
 		gameObject->_physicsModel = _physicsModelCube;
 		OBBCollider* _colliderCube = new OBBCollider(_transformCube, Vector3D(2.0f, 2.0f, 2.0f));
 		gameObject->_physicsModel->SetCollider(_colliderCube);
 		_gameObjects.push_back(gameObject);
 	}
-	_gameObjects[3]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
-	_gameObjects[4]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));
-	
+	//_gameObjects[3]->_physicsModel->SetVelocity(Vector3D(0, 10, 0));
+	_gameObjects[4]->_physicsModel->SetVelocity(Vector3D(0, 1, 0));	
 
 	Appearance* _appearanceDonut = new Appearance(herculesGeometry, shinyMaterial);
 	gameObject = new GameObject("Donut", _appearanceDonut);
@@ -557,6 +555,10 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 	gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
 	gameObject->SetTextureRV(_StoneTextureRV);
+	RigidBodyModel* _donutPhysicsModel = new RigidBodyModel(_transformDonut, 1.0f, true);
+	gameObject->_physicsModel = _donutPhysicsModel;
+	SphereCollider* _donutCollider = new SphereCollider(_transformDonut, 1.0f);
+	gameObject->_physicsModel->SetCollider(_donutCollider);
 	_gameObjects.push_back(gameObject);
 
 	return S_OK;
@@ -600,7 +602,7 @@ DX11PhysicsFramework::~DX11PhysicsFramework()
 
 	if (_dxgiDevice)_dxgiDevice->Release();
 	if (_dxgiFactory)_dxgiFactory->Release();
-	if (_device)_device->Release();
+	//if (_device)_device->Release();
 
 	
 }
@@ -633,12 +635,11 @@ void DX11PhysicsFramework::Update()
 		//constant forces
 		_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 10, 0));
 
-		if (GetAsyncKeyState('1'))
-		{
-			/*_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));*/
+		if (GetAsyncKeyState('S'))
+		{			
 			_gameObjects[1]->MoveForward();
 		}
-		if (GetAsyncKeyState('2'))
+		if (GetAsyncKeyState('W'))
 		{
 			_gameObjects[1]->MoveBackward();
 		}
@@ -716,104 +717,94 @@ void DX11PhysicsFramework::Update()
 void DX11PhysicsFramework::ResolveCollisions()
 {
 	//todo check all objs
-	CollisionManifold manifold;
+	for (int i = 0; i < 5; i++)
+	{
+		for (int k = 0; k < 5; k++)
+		{
+			if (_gameObjects[i] == NULL || _gameObjects[k] == NULL) continue;
 
-	Transform* objectATransform = _gameObjects[1]->_transform;
-	Transform* objectBTransform = _gameObjects[2]->_transform;
+			CollisionManifold manifold;
 
-	PhysicsModel* objectAPhysics = _gameObjects[1]->_physicsModel;
-	PhysicsModel* objectBPhysics = _gameObjects[2]->_physicsModel;
+			if (_gameObjects[i]->_transform == nullptr || _gameObjects[k]->_transform == nullptr || _gameObjects[i]->_physicsModel == nullptr || _gameObjects[k]->_physicsModel == nullptr) continue;
 
+			Transform* objectATransform = _gameObjects[i]->_transform;
+			Transform* objectBTransform = _gameObjects[k]->_transform;
 
-
-	if (objectAPhysics->IsCollidable() && objectBPhysics->IsCollidable() && objectAPhysics->GetCollider()->CollidesWith(*objectBPhysics->GetCollider(), manifold)) 
-	{				
-		Vector3D collisionNormal = manifold.collisionNormal;
-		Vector3D relVelocity = objectAPhysics->GetVelocity() - objectBPhysics->GetVelocity();
-		float restitution = 0.0; //todo change to a get
-		//if both objects are approching each other
-
-			if (Vector3D::DotProduct(manifold.collisionNormal, relVelocity) < 0.0f)
-			{				
-				/*float distance = (objectATransform->GetPosition() - objectBTransform->GetPosition()).Magnitude();
-
-				OBBCollider* objACollider = (OBBCollider*)objectAPhysics->GetCollider();
-				Vector3D halfExtentsObjA = objACollider->GetHalfExtents();
-				OBBCollider* objBCollider = (OBBCollider*)objectBPhysics->GetCollider();
-				Vector3D halfExtentsObjB = objBCollider->GetHalfExtents();*/
+			PhysicsModel* objectAPhysics = _gameObjects[i]->_physicsModel;
+			PhysicsModel* objectBPhysics = _gameObjects[k]->_physicsModel;
 
 
-				//if ((objectBTransform->GetPosition() - objectATransform->GetPosition()).Magnitude() <= (halfExtentsObjA + halfExtentsObjB).Magnitude())
-				//{
-				//	//clamp
-				//	Vector3D pointBoxOne = objectBTransform->GetPosition().Clamp(objectATransform->GetPosition() + halfExtentsObjB, objectATransform->GetPosition() + halfExtentsObjB.Inverse());
-				//	Vector3D pointBoxTwo = objectATransform->GetPosition().Clamp(objectBTransform->GetPosition() + halfExtentsObjA, objectBTransform->GetPosition() + halfExtentsObjA.Inverse());
-				//	float pointDist = (pointBoxTwo - pointBoxOne).Magnitude();
+			if (objectAPhysics->IsCollidable() && objectBPhysics->IsCollidable() && (objectAPhysics->GetCollider()->CollidesWith(*objectBPhysics->GetCollider(), manifold) || objectBPhysics->GetCollider()->CollidesWith(*objectAPhysics->GetCollider(), manifold)))
+			{
+				Vector3D collisionNormal = manifold.collisionNormal;
+				Vector3D relVelocity = objectAPhysics->GetVelocity() - objectBPhysics->GetVelocity();
+				float restitution = 0.3; //todo change to a get
+				//if both objects are approching each other
 
-				Vector3D distToMove;
-
-
- 
-				if (size(manifold.points) == 1)
+				if (Vector3D::DotProduct(manifold.collisionNormal, relVelocity) < 0.0f)
 				{
-					distToMove = manifold.collisionNormal * manifold.points[0].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();				
-					objectATransform->SetPosition(objectATransform->GetPosition() + distToMove);
-					objectBTransform->SetPosition(objectBTransform->GetPosition() + distToMove.Inverse());
-				}
-				else
-				{
-					for (int i = 0; i < size(manifold.points); i++)
-					{	
-						if (manifold.points[i].penetrationDepth > 0)
+					Vector3D distToMove;
+
+					if (size(manifold.points) == 1)
+					{
+						distToMove = manifold.collisionNormal * manifold.points[0].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
+						objectATransform->SetPosition(objectATransform->GetPosition() + distToMove);
+						objectBTransform->SetPosition(objectBTransform->GetPosition() + distToMove.Inverse());
+					}
+					else
+					{
+						for (int pointCount = 0; pointCount < size(manifold.points); pointCount++)
 						{
-							distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
-							switch (Vector3D::FindAxis(objectATransform->GetPosition(), objectBTransform->GetPosition()))
+							if (manifold.points[pointCount].penetrationDepth > 0)
 							{
-							case 'x':
-								distToMove = Vector3D(distToMove.x, 0, 0);
-								break;
-							case 'y':
-								distToMove = Vector3D(0, distToMove.y, 0);
-								break;
-							case 'z':
-								distToMove = Vector3D(0, 0, distToMove.z);
-								break;
+								distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
+								switch (Vector3D::FindAxis(objectATransform->GetPosition(), objectBTransform->GetPosition()))
+								{
+								case 'x':
+									distToMove = Vector3D(distToMove.x, 0, 0);
+									break;
+								case 'y':
+									distToMove = Vector3D(0, distToMove.y, 0);
+									break;
+								case 'z':
+									distToMove = Vector3D(0, 0, distToMove.z);
+									break;
+								}
+								objectATransform->SetPosition(objectATransform->GetPosition() + distToMove);
 							}
-							objectATransform->SetPosition(objectATransform->GetPosition() + distToMove);
-						}
-						else if(manifold.points[i].penetrationDepth < 0)
-						{							
-							distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
-							switch (Vector3D::FindAxis(objectATransform->GetPosition(), objectBTransform->GetPosition()))
+							else if (manifold.points[pointCount].penetrationDepth < 0)
 							{
-							case 'x':
-								distToMove = Vector3D(distToMove.x, 0, 0);
-								break;
-							case 'y':
-								distToMove = Vector3D(0, distToMove.y, 0);
-								break;
-							case 'z':
-								distToMove = Vector3D(0, 0, distToMove.z);
-								break;
+								distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
+								switch (Vector3D::FindAxis(objectATransform->GetPosition(), objectBTransform->GetPosition()))
+								{
+								case 'x':
+									distToMove = Vector3D(distToMove.x, 0, 0);
+									break;
+								case 'y':
+									distToMove = Vector3D(0, distToMove.y, 0);
+									break;
+								case 'z':
+									distToMove = Vector3D(0, 0, distToMove.z);
+									break;
+								}
+								objectBTransform->SetPosition(objectBTransform->GetPosition() + distToMove);
 							}
-							objectBTransform->SetPosition(objectBTransform->GetPosition() + distToMove);														
 						}
 					}
-					
+				
+
+					float objAInverseMass = objectAPhysics->GetInverseMass();
+					float objBInverseMass = objectBPhysics->GetInverseMass();
+
+					float vj = Vector3D::DotProduct((manifold.collisionNormal * -(1 + restitution)), relVelocity);
+					float j = vj / (objAInverseMass + objBInverseMass);
+					objectAPhysics->ApplyImpulse(manifold.collisionNormal * (j * objAInverseMass));
+					objectBPhysics->ApplyImpulse(manifold.collisionNormal * (j * -objBInverseMass));
+
+					manifold = CollisionManifold();
 				}
-				//}
-
-				float objAInverseMass = objectAPhysics->GetInverseMass();
-				float objBInverseMass = objectBPhysics->GetInverseMass();
-
-				float vj = Vector3D::DotProduct((manifold.collisionNormal * -(1 + restitution)), relVelocity);
-				float j = vj / (objAInverseMass + objBInverseMass);
-				objectAPhysics->ApplyImpulse(manifold.collisionNormal * (j * objAInverseMass));
-				objectBPhysics->ApplyImpulse(manifold.collisionNormal * (j * -objBInverseMass));
-
-				manifold = CollisionManifold();
 			}
-		
+		}
 	}
 }
 

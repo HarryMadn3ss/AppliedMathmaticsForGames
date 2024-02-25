@@ -11,9 +11,10 @@ protected:
 
 
 public:
-	RigidBodyModel(Transform* transform, float mass) : PhysicsModel(transform, mass) 
+	RigidBodyModel(Transform* transform, float mass, bool gravity) : PhysicsModel(transform, mass) 
 	{
 		_transform = transform;
+		_simulateGravity = gravity;
 
 		Vector3D pos = _transform->GetPosition();
 	};

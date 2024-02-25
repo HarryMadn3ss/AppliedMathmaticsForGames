@@ -33,7 +33,7 @@ void PhysicsModel::Update(float deltaTime)
 	Vector3D position = _transform->GetPosition();	
 
 
-	if (position.y > 1)
+	if (position.y > 1.0f)
 	{
 		_simulateGravity = true;
 		_simulateFriction = false;
@@ -42,6 +42,7 @@ void PhysicsModel::Update(float deltaTime)
 	{
 		_simulateGravity = false;
 		_simulateFriction = true;
+		//_transform->SetPosition(Vector3D(_transform->GetPosition().x, 2.0f, _transform->GetPosition().z));
 	}
 
 	if (_simulateGravity)

@@ -46,7 +46,7 @@ public:
 	float GetInverseMass(){	if (_mass == 0) return 0;  return 1 / _mass; }
 
 	void AddForce(Vector3D force) { _netForce += force; }
-	Vector3D GravityForce() { return Vector3D(0, -9.81 * _mass, 0); }
+	Vector3D GravityForce() { return Vector3D(0, -9.81f * _mass, 0); }
 	Vector3D DragForce();
 	Vector3D FrictionForce();
 

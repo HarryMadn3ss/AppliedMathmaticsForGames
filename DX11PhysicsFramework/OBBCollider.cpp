@@ -28,11 +28,18 @@ bool OBBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
     {
         //clamp
         Vector3D pointBoxOne = other.GetPosition().Clamp(this->GetPosition() + halfExtentsObjB, this->GetPosition() + halfExtentsObjB.Inverse());
-        Vector3D pointBoxTwo = this->GetPosition().Clamp(other.GetPosition() + halfExtentsObjA, other.GetPosition() + halfExtentsObjA.Inverse());
-        float pointADist = (pointBoxTwo - pointBoxOne).Magnitude();
-        float pointBDist = (pointBoxOne - pointBoxTwo).Magnitude();
+        Vector3D pointBoxTwo = this->GetPosition().Clamp(other.GetPosition() + halfExtentsObjA, other.GetPosition() + halfExtentsObjA.Inverse());   
+
+        //project points onto collision normal
 
         out.collisionNormal = diff.Normalize();
+
+        Vector3D pointAProj = pointBoxOne * (Vector3D::DotProduct(pointBoxOne, out.collisionNormal)) / Vector3D::DotProduct(pointBoxOne, pointBoxOne);
+        Vector3D pointBProj = pointBoxTwo * (Vector3D::DotProduct(pointBoxTwo, out.collisionNormal)) / Vector3D::DotProduct(pointBoxTwo, pointBoxTwo);
+
+        float pointADist = (pointBProj - pointAProj).Magnitude();
+        float pointBDist = (pointAProj - pointBProj).Magnitude();
+
         //out.collisionNormal.Normalize();
         out.contactPointCount = 2;
         out.points[0].position = pointBoxOne;        
