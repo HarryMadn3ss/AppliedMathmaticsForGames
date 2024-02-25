@@ -631,7 +631,12 @@ void DX11PhysicsFramework::Update()
 		// Move gameobjects
 		// 
 		//constant forces
-		_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 10, 0));
+
+		//apply constnat accleration
+		if (GetAsyncKeyState(VK_SPACE))
+		{
+			_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 10, 0));
+		}
 
 		if (GetAsyncKeyState('1'))
 		{
@@ -716,6 +721,8 @@ void DX11PhysicsFramework::Update()
 void DX11PhysicsFramework::ResolveCollisions()
 {
 	//todo check all objs
+	//cube nums 1234
+
 	CollisionManifold manifold;
 
 	Transform* objectATransform = _gameObjects[1]->_transform;
