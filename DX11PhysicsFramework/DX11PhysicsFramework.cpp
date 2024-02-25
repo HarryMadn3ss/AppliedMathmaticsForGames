@@ -730,7 +730,7 @@ void DX11PhysicsFramework::ResolveCollisions()
 	{				
 		Vector3D collisionNormal = manifold.collisionNormal;
 		Vector3D relVelocity = objectAPhysics->GetVelocity() - objectBPhysics->GetVelocity();
-		float restitution = 0.0; //todo change to a get
+		float restitution = 0.2; //todo change to a get
 		//if both objects are approching each other
 
 			if (Vector3D::DotProduct(manifold.collisionNormal, relVelocity) < 0.0f)
