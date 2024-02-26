@@ -174,6 +174,13 @@ void Vector3D::operator+=(float _scalar)
 	this->z += _scalar;
 }
 
+void Vector3D::operator-=(Vector3D _vector)
+{
+	this->x -= _vector.x;
+	this->y -= _vector.y;
+	this->z -= _vector.z;
+}
+
 void Vector3D::operator*=(float _scalar)
 {
 	this->x *= _scalar;

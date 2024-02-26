@@ -6,10 +6,10 @@ private:
 	float _timeAlive;
 	float _resetTime;
 
-	bool _invertGravity;
+	bool _invertGravity;	
 
 protected:
-	bool isActive = false;
+	bool _isActive = false;
 
 public:
 	ParticleModel();
@@ -18,6 +18,7 @@ public:
 	~ParticleModel();
 
 	void Update(float deltaTime);
+	void Activate();
 	void Reset();
 
 	void AddRelativeForce(Vector3D impactPoint, Vector3D force) override { AddForce(force); }
@@ -25,6 +26,7 @@ public:
 	float GetResetTime() { return _resetTime; }
 	void SetResetTime(float i) { _resetTime = i; }
 	Transform* GetTransform() { return _transform; }
-	bool GetActive() { return isActive; }
+	bool GetActive() { return _isActive; }
+	bool GetInvertGrav() { return _invertGravity; }
 };
 

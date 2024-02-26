@@ -26,27 +26,31 @@ PhysicsModel::~PhysicsModel()
 	//_transform = nullptr;
 }
 
-void PhysicsModel::Update(float deltaTime)
+void PhysicsModel::Update(float deltaTime, bool invertGrav)
 {
 	if (_mass == 0) return;	
 
 	Vector3D position = _transform->GetPosition();	
-
+		
 
 	if (position.y > 1)
 	{
-		_simulateGravity = true;
+		//_simulateGravity = true;
 		_simulateFriction = false;
 	}
 	else
 	{
-		_simulateGravity = false;
+		//_simulateGravity = false;
 		_simulateFriction = true;
 	}
 
 	if (_simulateGravity)
 	{
-		_netForce += GravityForce();
+		if (invertGrav)
+		{
+			_netForce -= GravityForce();
+		}
+		else _netForce += GravityForce();
 	}	
 
 	if (_simulateFriction)

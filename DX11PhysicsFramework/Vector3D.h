@@ -51,6 +51,7 @@ public:
 	bool operator==(float _scalar);
 	void operator+=(Vector3D _vector);
 	void operator+=(float _scalar);
+	void operator-=(Vector3D _vector);
 	void operator*=(float _scalar);
 	//division
 	/*Vector3D operator/(Vector3D _vector);*/

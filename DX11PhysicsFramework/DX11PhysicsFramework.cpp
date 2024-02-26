@@ -526,7 +526,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	RigidBodyModel* _floorPhysicsModel = new RigidBodyModel(_transformFloor, 0.0f);
 	gameObject->_physicsModel = _floorPhysicsModel;
 	gameObject->_physicsModel->SetGravity(false);
-	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(6.0f, 0.1f, 6.0f));
+	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(15.0f, 15.0f, 0.1f));
 	gameObject->_physicsModel->SetCollider(_floorCollider);
 	gameObject->SetTextureRV(_GroundTextureRV);
 	
@@ -564,6 +564,23 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
 	gameObject->SetTextureRV(_StoneTextureRV);
 	_gameObjects.push_back(gameObject);
+
+
+	for (int i = 0; i < 10; i++)
+	{
+		Appearance* _appearanceParticle = new Appearance(herculesGeometry, shinyMaterial);
+		gameObject = new GameObject("Particle", _appearanceParticle);
+		Transform* _transformParticle = new Transform();
+		gameObject->_transform = _transformParticle;
+		gameObject->_transform->SetScale(Vector3D(0.3f, 0.3f, 0.3f));
+		gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
+		//gameObject->SetParent(_gameObjects[5]);
+		gameObject->SetTextureRV(_StoneTextureRV);
+		ParticleModel* _particlePhysicsModel = new ParticleModel(_transformParticle, Vector3D(), 5.0f, true);
+		gameObject->_particleModel = _particlePhysicsModel;
+		_gameObjects.push_back(gameObject);
+	}
+	
 
 	return S_OK;
 }
@@ -766,6 +783,13 @@ void DX11PhysicsFramework::ResolveCollisions()
 
 					Vector3D distToMove;
 
+
+					float objAInverseMass = objectAPhysics->GetInverseMass();
+					float objBInverseMass = objectBPhysics->GetInverseMass();
+					
+					float invMassSum = objAInverseMass + objBInverseMass;
+
+
 					if (size(manifold.points) == 1)
 					{
 						distToMove = manifold.collisionNormal * manifold.points[0].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
@@ -778,7 +802,7 @@ void DX11PhysicsFramework::ResolveCollisions()
 						{
 							if (manifold.points[i].penetrationDepth > 0)
 							{
-								distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
+								distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * (objAInverseMass/invMassSum);
 								switch (Vector3D::FindAxis(objectATransform->GetPosition(), objectBTransform->GetPosition()))
 								{
 								case 'x':
@@ -795,7 +819,7 @@ void DX11PhysicsFramework::ResolveCollisions()
 							}
 							else if (manifold.points[i].penetrationDepth < 0)
 							{
-								distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
+								distToMove = manifold.collisionNormal * manifold.points[i].penetrationDepth * (objBInverseMass/invMassSum);
 								switch (Vector3D::FindAxis(objectATransform->GetPosition(), objectBTransform->GetPosition()))
 								{
 								case 'x':
@@ -812,9 +836,6 @@ void DX11PhysicsFramework::ResolveCollisions()
 							}
 						}
 					}					
-
-					float objAInverseMass = objectAPhysics->GetInverseMass();
-					float objBInverseMass = objectBPhysics->GetInverseMass();
 
 					float vj = Vector3D::DotProduct((manifold.collisionNormal * -(1 + restitution)), relVelocity);
 					float j = vj / (objAInverseMass + objBInverseMass);

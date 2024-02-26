@@ -9,7 +9,7 @@
 #include "Transform.h"
 #include "Appearance.h"
 //#include "PhysicsModel.h"
-//#include "ParticleModel.h"
+#include "ParticleModel.h"
 #include "RigidBodyModel.h"
 
 using namespace DirectX;
@@ -63,6 +63,7 @@ public:
 	Transform* _transform;
 	Appearance* _appearance;
 	PhysicsModel* _physicsModel = nullptr;
+	ParticleModel* _particleModel = nullptr;
 	//RigidBodyModel* _rigedBody = nullptr;
 
 private:

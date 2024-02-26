@@ -35,7 +35,7 @@ public:
 	PhysicsModel(Transform* transform, float mass);
 	virtual ~PhysicsModel() = 0;
 
-	void Update(float deltaTime);
+	void Update(float deltaTime, bool invertGrav = false);
 	Vector3D GetVelocity() { return _velocity; }
 	void SetVelocity(Vector3D velocity) { _velocity = velocity; }	
 	void SetAcclerationValue(Vector3D acceleration) { _acclerationValue = acceleration; }

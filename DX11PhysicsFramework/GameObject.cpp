@@ -46,11 +46,15 @@ void GameObject::Update(float dt)
 		XMStoreFloat4x4(&_world, this->GetWorldMatrix() * _parent->GetWorldMatrix());
 	}
 		
-	if (_physicsModel != nullptr)
+	if (_physicsModel != nullptr && _physicsModel->GetCollider() != nullptr)
 	{
 		OBBCollider* collider = (OBBCollider*)_physicsModel->GetCollider();
 		collider->SetNormals(Vector3D(_world._11, _world._12, _world._13), Vector3D(_world._21, _world._22, _world._23), Vector3D(_world._31, _world._32, _world._33));
 		_physicsModel->Update(dt);
+	}
+	if (_particleModel != nullptr)
+	{		
+		_particleModel->Update(dt);
 	}
 
 	//DebugClass::Instance()->PrintDebugInt(5);
