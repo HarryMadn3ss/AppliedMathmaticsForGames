@@ -30,6 +30,7 @@ protected:
 	float _dragValue = 0;
 	bool _simulateFriction= false;
 	float _frictionValue = 0;
+	
 public:
 	PhysicsModel();
 	PhysicsModel(Transform* transform, float mass);
@@ -42,6 +43,7 @@ public:
 	/*void SetIsAccleration(bool isAcclerating) { _constantAcceleration = isAcclerating; }*/
 
 	float GetMass() { return _mass; }
+	void SetMass(float mass) { _mass = mass; }
 
 	float GetInverseMass(){	if (_mass == 0) return 0;  return 1 / _mass; }
 
@@ -60,6 +62,6 @@ public:
 
 	virtual void AddRelativeForce(Vector3D impactPoint, Vector3D force) = 0;
 
-	void CalculateAngularVelocity(float deltaTime);
+	void CalculateAngularVelocity(float deltaTime);	
 };
 

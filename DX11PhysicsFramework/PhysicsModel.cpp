@@ -34,35 +34,33 @@ void PhysicsModel::Update(float deltaTime, bool invertGrav)
 		
 
 	if (position.y > 1)
-	{
-		//_simulateGravity = true;
+	{ 
+		_simulateGravity = true;
 		_simulateFriction = false;
 	}
 	else
 	{
-		//_simulateGravity = false;
+		_simulateGravity = false;
 		_simulateFriction = true;
 	}
 
 	if (_simulateGravity)
 	{
-		if (invertGrav)
-		{
-			_netForce -= GravityForce();
-		}
-		else _netForce += GravityForce();
-	}	
-
+		_netForce += GravityForce();
+	}
+	
 	if (_simulateFriction)
 	{
 		_netForce += FrictionForce();
 	}
-
+	
 	if (_simulateDrag)
 	{
 		_netForce += DragForce();
-	}	
+	}
 	
+	
+
 
 	_acclerationValue += _netForce / _mass;
 	_velocity = _velocity + _acclerationValue * deltaTime;	

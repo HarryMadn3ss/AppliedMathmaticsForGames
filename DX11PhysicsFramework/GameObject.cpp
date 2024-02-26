@@ -52,10 +52,10 @@ void GameObject::Update(float dt)
 		collider->SetNormals(Vector3D(_world._11, _world._12, _world._13), Vector3D(_world._21, _world._22, _world._23), Vector3D(_world._31, _world._32, _world._33));
 		_physicsModel->Update(dt);
 	}
-	if (_particleModel != nullptr)
+	/*if (_particleModel != nullptr)
 	{		
 		_particleModel->Update(dt);
-	}
+	}*/
 
 	//DebugClass::Instance()->PrintDebugInt(5);
 }

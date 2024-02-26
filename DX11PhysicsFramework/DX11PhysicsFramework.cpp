@@ -566,18 +566,18 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	_gameObjects.push_back(gameObject);
 
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		Appearance* _appearanceParticle = new Appearance(herculesGeometry, shinyMaterial);
 		gameObject = new GameObject("Particle", _appearanceParticle);
 		Transform* _transformParticle = new Transform();
 		gameObject->_transform = _transformParticle;
 		gameObject->_transform->SetScale(Vector3D(0.3f, 0.3f, 0.3f));
-		gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
+		gameObject->_transform->SetPosition(Vector3D(0.0f, 5.5f, 10.0f));
 		//gameObject->SetParent(_gameObjects[5]);
 		gameObject->SetTextureRV(_StoneTextureRV);
-		ParticleModel* _particlePhysicsModel = new ParticleModel(_transformParticle, Vector3D(), 5.0f, true);
-		gameObject->_particleModel = _particlePhysicsModel;
+		RigidBodyModel* _particlePhysicsModel = new RigidBodyModel(_transformParticle, 1.0f);
+		gameObject->_physicsModel = _particlePhysicsModel;		
 		_gameObjects.push_back(gameObject);
 	}
 	
@@ -655,6 +655,10 @@ void DX11PhysicsFramework::Update()
 		// 
 		//constant forces
 
+		for (int i = 6; i < 106; i++)
+		{
+			_gameObjects[i]->_physicsModel->AddForce(Vector3D(0, 100, 0));
+		}
 		//apply constnat accleration
 		if (GetAsyncKeyState(VK_SPACE))
 		{
@@ -710,6 +714,7 @@ void DX11PhysicsFramework::Update()
 
 		_camera->SetPosition(cameraPos);
 		_camera->Update();
+
 
 		// Update objects
 		for (auto gameObject : _gameObjects)
@@ -840,7 +845,9 @@ void DX11PhysicsFramework::ResolveCollisions()
 					float vj = Vector3D::DotProduct((manifold.collisionNormal * -(1 + restitution)), relVelocity);
 					float j = vj / (objAInverseMass + objBInverseMass);
 					objectAPhysics->ApplyImpulse(manifold.collisionNormal * (j * objAInverseMass));
+					//objectAPhysics->AddRelativeForce(distToMove, distToMove);
 					objectBPhysics->ApplyImpulse(manifold.collisionNormal * (j * -objBInverseMass));
+					//objectBPhysics->AddRelativeForce(distToMove, distToMove);
 
 					manifold = CollisionManifold();
 				}
