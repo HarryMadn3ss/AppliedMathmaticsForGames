@@ -526,7 +526,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	RigidBodyModel* _floorPhysicsModel = new RigidBodyModel(_transformFloor, 0.0f);
 	gameObject->_physicsModel = _floorPhysicsModel;
 	gameObject->_physicsModel->SetGravity(false);
-	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(30.0f, 1.0f, 30.0f));
+	AABBCollider* _floorCollider = new AABBCollider(_transformFloor, Vector3D(30.0f, 1.0f, 30.0f));
 	gameObject->_physicsModel->SetCollider(_floorCollider);
 	gameObject->SetTextureRV(_GroundTextureRV);
 	
@@ -563,6 +563,10 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 	gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
 	gameObject->SetTextureRV(_StoneTextureRV);
+	RigidBodyModel* _physicsModelDonut = new RigidBodyModel(_transformDonut, 1);
+	gameObject->_physicsModel = _physicsModelDonut;
+	SphereCollider* _colliderDonut = new SphereCollider(_transformDonut, 1.0f);
+	gameObject->_physicsModel->SetCollider(_colliderDonut);
 	_gameObjects.push_back(gameObject);
 
 
@@ -622,7 +626,7 @@ DX11PhysicsFramework::~DX11PhysicsFramework()
 
 	if (_dxgiDevice)_dxgiDevice->Release();
 	if (_dxgiFactory)_dxgiFactory->Release();
-	if (_device)_device->Release();
+	//if (_device)_device->Release();
 
 	
 }
@@ -744,9 +748,9 @@ void DX11PhysicsFramework::ResolveCollisions()
 {
 	//todo check all objs
 	//cube nums 1234
-	for (int l = 0; l < 5; l++)
+	for (int l = 0; l < 6; l++)
 	{
-		for (int m = 0; m < 5; m++)
+		for (int m = 0; m < 6; m++)
 		{
 			if (m == l) continue;
 
