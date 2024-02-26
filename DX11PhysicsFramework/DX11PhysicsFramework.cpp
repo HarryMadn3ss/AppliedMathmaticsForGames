@@ -526,7 +526,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	RigidBodyModel* _floorPhysicsModel = new RigidBodyModel(_transformFloor, 0.0f);
 	gameObject->_physicsModel = _floorPhysicsModel;
 	gameObject->_physicsModel->SetGravity(false);
-	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(15.0f, 15.0f, 0.1f));
+	OBBCollider* _floorCollider = new OBBCollider(_transformFloor, Vector3D(30.0f, 1.0f, 30.0f));
 	gameObject->_physicsModel->SetCollider(_floorCollider);
 	gameObject->SetTextureRV(_GroundTextureRV);
 	
@@ -566,17 +566,16 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	_gameObjects.push_back(gameObject);
 
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 100; i++)
 	{
-		Appearance* _appearanceParticle = new Appearance(herculesGeometry, shinyMaterial);
+		Appearance* _appearanceParticle = new Appearance(cubeGeometry, shinyMaterial);
 		gameObject = new GameObject("Particle", _appearanceParticle);
 		Transform* _transformParticle = new Transform();
 		gameObject->_transform = _transformParticle;
-		gameObject->_transform->SetScale(Vector3D(0.3f, 0.3f, 0.3f));
-		gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
-		//gameObject->SetParent(_gameObjects[5]);
+		gameObject->_transform->SetScale(Vector3D(0.1f, 0.1f, 0.1f));
+		gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));		
 		gameObject->SetTextureRV(_StoneTextureRV);
-		ParticleModel* _particlePhysicsModel = new ParticleModel(_transformParticle, Vector3D(), 5.0f, true);
+		ParticleModel* _particlePhysicsModel = new ParticleModel(_transformParticle, 1.0f);
 		gameObject->_particleModel = _particlePhysicsModel;
 		_gameObjects.push_back(gameObject);
 	}
@@ -749,6 +748,8 @@ void DX11PhysicsFramework::ResolveCollisions()
 	{
 		for (int m = 0; m < 5; m++)
 		{
+			if (m == l) continue;
+
 			CollisionManifold manifold;
 
 			Transform* objectATransform = _gameObjects[l]->_transform;

@@ -4,7 +4,7 @@ class ParticleModel : public PhysicsModel
 {
 private:
 	float _timeAlive;
-	float _resetTime;
+	float _resetTime = rand() % 20 + 2;
 
 	bool _invertGravity;	
 

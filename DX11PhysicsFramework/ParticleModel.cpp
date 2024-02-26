@@ -33,12 +33,14 @@ void ParticleModel::Update(float deltaTime)
 
 	if (_isActive)
 	{
+		AddForce(Vector3D((rand() % 10) - 5, rand() % 5 / 10, (rand() % 10) - 5));
 		PhysicsModel::Update(deltaTime, _invertGravity);
 	}
 }
 
 void ParticleModel::Activate()
 {
+	_timeAlive = 0.0f;
 	_isActive = true;
 	_transform->SetPosition(Vector3D(-5.0f, 1.5f, 10.0f));
 }
