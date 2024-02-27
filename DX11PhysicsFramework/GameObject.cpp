@@ -22,8 +22,8 @@ GameObject::~GameObject()
 
 	//delete _physicsModel;
 	//if (_physicsModel) delete _physicsModel;
-	delete _appearance;
-	delete _transform;
+	//delete _appearance;
+	//delete _transform;
 	_physicsModel = nullptr;	
 	_appearance = nullptr;
 	_transform = nullptr;
