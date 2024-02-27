@@ -1,5 +1,6 @@
 #include "SphereCollider.h"
 #include "OBBCollider.h"
+#include "PlaneCollider.h"
 
 bool SphereCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
@@ -61,4 +62,9 @@ bool SphereCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
         return true;
     }
     else return false;
+}
+
+bool SphereCollider::CollidesWith(PlaneCollider& other, CollisionManifold& out)
+{
+    return false;
 }

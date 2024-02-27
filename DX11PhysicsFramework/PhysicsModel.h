@@ -3,6 +3,8 @@
 #include "Transform.h"
 #include "SphereCollider.h"
 #include "OBBCollider.h"
+#include "PlaneCollider.h"
+#include "AABBCollider.h"
 
 class PhysicsModel
 {
@@ -46,7 +48,7 @@ public:
 	float GetInverseMass(){	if (_mass == 0) return 0;  return 1 / _mass; }
 
 	void AddForce(Vector3D force) { _netForce += force; }
-	Vector3D GravityForce() { return Vector3D(0, -9.81 * _mass, 0); }
+	Vector3D GravityForce() { return Vector3D(0, -9.81f * _mass, 0); }
 	void SetGravity(bool gravity) { _simulateGravity = gravity; }
 	Vector3D DragForce();
 	Vector3D FrictionForce();

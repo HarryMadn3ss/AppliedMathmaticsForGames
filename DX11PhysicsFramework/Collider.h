@@ -5,6 +5,7 @@
 class SphereCollider;
 class AABBCollider;
 class OBBCollider;
+class PlaneCollider;
 
 class Collider 
 {
@@ -23,6 +24,8 @@ public:
 	virtual bool CollidesWith(SphereCollider& other, CollisionManifold& out) = 0;
 	virtual bool CollidesWith(AABBCollider& other, CollisionManifold& out) = 0;
 	virtual bool CollidesWith(OBBCollider& other, CollisionManifold& out) = 0;
+	virtual bool CollidesWith(PlaneCollider& other, CollisionManifold& out) =0;
+
 
 	Vector3D GetPosition() const { return _transform->GetPosition(); }
 

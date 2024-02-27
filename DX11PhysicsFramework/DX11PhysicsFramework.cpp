@@ -520,13 +520,13 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	GameObject* gameObject = new GameObject("Floor", _appearanceFloor);
 	Transform* _transformFloor = new Transform();
 	gameObject->_transform = _transformFloor;
-	gameObject->_transform->SetPosition(Vector3D(0.0f, 0.0f, 0.0f));
+	gameObject->_transform->SetPosition(Vector3D(0.0f, -1.0f, 0.0f));
 	gameObject->_transform->SetScale(Vector3D(15.0f, 15.0f, 15.0f));
 	gameObject->_transform->SetRotation(90.0f, 0.0f, 0.0f);
 	RigidBodyModel* _floorPhysicsModel = new RigidBodyModel(_transformFloor, 0.0f);
 	gameObject->_physicsModel = _floorPhysicsModel;
 	gameObject->_physicsModel->SetGravity(false);
-	AABBCollider* _floorCollider = new AABBCollider(_transformFloor, Vector3D(30.0f, 1.0f, 30.0f));
+	PlaneCollider* _floorCollider = new PlaneCollider(_transformFloor/*, Vector3D(30.0f, 30.0f, 1.0f)*/);
 	gameObject->_physicsModel->SetCollider(_floorCollider);
 	gameObject->SetTextureRV(_GroundTextureRV);
 	
@@ -544,6 +544,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		gameObject->_transform = _transformCube;
 		gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
 		gameObject->_transform->SetPosition(Vector3D(-2.0f + (i * 2.5f), 5.0f, 10.0f));
+		//gameObject->_transform->SetRotation(90.0f, 0.0f, 0.0f);
 		gameObject->SetTextureRV(_StoneTextureRV);
 		RigidBodyModel* _physicsModelCube = new RigidBodyModel(_transformCube, 1.0f);
 		gameObject->_physicsModel = _physicsModelCube;

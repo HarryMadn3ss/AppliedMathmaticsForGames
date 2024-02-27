@@ -1,6 +1,8 @@
 #include "OBBCollider.h"
 #include "AABBCollider.h"
 #include "SphereCollider.h"
+#include "PlaneCollider.h"
+
 
 bool OBBCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
@@ -250,4 +252,10 @@ bool OBBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 
         //if no axis is found
         return true;    
+}
+
+bool OBBCollider::CollidesWith(PlaneCollider& other, CollisionManifold& out)
+{
+    if (other.CollidesWith(other, out)) return true;
+    else return false;    
 }

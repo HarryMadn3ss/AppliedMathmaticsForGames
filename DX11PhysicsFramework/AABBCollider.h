@@ -23,6 +23,8 @@ public:
 	virtual bool CollidesWith(SphereCollider& other, CollisionManifold& out) override;
 	virtual bool CollidesWith(AABBCollider& other, CollisionManifold& out) override;
 	virtual bool CollidesWith(OBBCollider& other, CollisionManifold& out) override;
+	bool CollidesWith(PlaneCollider& other, CollisionManifold& out) override;
+
 
 	Vector3D GetHalfExtents() { return _halfExtents; }
 	Vector3D GetNormalAxis(int i) { return _normalAxis[i]; }

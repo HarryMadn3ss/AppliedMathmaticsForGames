@@ -1,6 +1,8 @@
 #include "AABBCollider.h"
 #include "OBBCollider.h"
 #include "SphereCollider.h"
+#include "PlaneCollider.h"
+
 
 bool AABBCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
@@ -24,5 +26,10 @@ bool AABBCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
 bool AABBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 {
 	if (other.CollidesWith(other, out)) return true;
+	return false;
+}
+
+bool AABBCollider::CollidesWith(PlaneCollider& other, CollisionManifold& out)
+{
 	return false;
 }
