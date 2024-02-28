@@ -520,7 +520,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	GameObject* gameObject = new GameObject("Floor", _appearanceFloor);
 	Transform* _transformFloor = new Transform();
 	gameObject->_transform = _transformFloor;
-	gameObject->_transform->SetPosition(Vector3D(0.0f, -1.0f, 0.0f));
+	gameObject->_transform->SetPosition(Vector3D(0.0f, 0.0f, 0.0f));
 	gameObject->_transform->SetScale(Vector3D(15.0f, 15.0f, 15.0f));
 	gameObject->_transform->SetRotation(90.0f, 0.0f, 0.0f);
 	RigidBodyModel* _floorPhysicsModel = new RigidBodyModel(_transformFloor, 0.0f);
@@ -562,7 +562,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	Transform* _transformDonut = new Transform();
 	gameObject->_transform = _transformDonut;
 	gameObject->_transform->SetScale(Vector3D(1.0f, 1.0f, 1.0f));
-	gameObject->_transform->SetPosition(Vector3D(-5.0f, 0.5f, 10.0f));
+	gameObject->_transform->SetPosition(Vector3D(-5.0f, 5.0f, 10.0f));
 	gameObject->SetTextureRV(_StoneTextureRV);
 	RigidBodyModel* _physicsModelDonut = new RigidBodyModel(_transformDonut, 1);
 	gameObject->_physicsModel = _physicsModelDonut;
@@ -571,9 +571,9 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	_gameObjects.push_back(gameObject);
 
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 500; i++)
 	{
-		Appearance* _appearanceParticle = new Appearance(cubeGeometry, shinyMaterial);
+		Appearance* _appearanceParticle = new Appearance(herculesGeometry, shinyMaterial);
 		gameObject = new GameObject("Particle", _appearanceParticle);
 		Transform* _transformParticle = new Transform();
 		gameObject->_transform = _transformParticle;
@@ -796,11 +796,12 @@ void DX11PhysicsFramework::ResolveCollisions()
 					float invMassSum = objAInverseMass + objBInverseMass;
 
 
-					if (size(manifold.points) == 1)
+					if (manifold.contactPointCount == 1)
 					{
-						distToMove = manifold.collisionNormal * manifold.points[0].penetrationDepth * objectAPhysics->GetInverseMass() * objectBPhysics->GetInverseMass();
-						objectATransform->SetPosition(objectATransform->GetPosition() + distToMove);
-						objectBTransform->SetPosition(objectBTransform->GetPosition() + distToMove.Inverse());
+						Vector3D distAToMove = manifold.collisionNormal * manifold.points[0].penetrationDepth * (objAInverseMass / invMassSum);
+						Vector3D distBToMove = manifold.collisionNormal * manifold.points[0].penetrationDepth * (objBInverseMass / invMassSum);
+						objectATransform->SetPosition(objectATransform->GetPosition() + distAToMove);
+						objectBTransform->SetPosition(objectBTransform->GetPosition() + distBToMove.Inverse());
 					}
 					else
 					{

@@ -7,7 +7,34 @@
 
 bool PlaneCollider::CollidesWith(SphereCollider& other, CollisionManifold& out)
 {
-    return false;
+    float dist = Vector3D::DotProduct(other.GetPosition(), _normal);
+
+    //Vector3D radiusDist = other.GetPosition() + other.GetRadius();
+
+    Vector3D pointOnPlane = other.GetPosition() - (_normal * dist);
+
+    //if (pointOnPlane.x > radiusDist.x || pointOnPlane.x < -radiusDist.x) return false;
+    //if (pointOnPlane.y > radiusDist.y || pointOnPlane.y < -radiusDist.y) return false;
+    //if (pointOnPlane.z > radiusDist.z || pointOnPlane.z < -radiusDist.z) return false;
+    if (abs(dist) >= other.GetRadius()) return false;
+
+    out.collisionNormal = _normal;
+
+    //Vector3D pointBox = pointOnPlane.Clamp(maxPoint, minPoint);
+    //Vector3D pointProj = other.GetPosition() * (Vector3D::DotProduct(pointBox, _normal)) / Vector3D::DotProduct(pointBox, pointBox);
+
+    //Vector3D diff  = other.GetPosition() * _normal;
+
+    //Vector3D diff  = other.GetPosition() * (Vector3D::DotProduct(other.GetPosition(), _normal)) / Vector3D::DotProduct(other.GetPosition(), other.GetPosition());
+    float diff = Vector3D::DotProduct(this->GetPosition(), _normal) - (Vector3D::DotProduct(other.GetPosition(), _normal));
+
+
+
+    out.contactPointCount = 1;
+    //out.points[0].position = pointBox;
+    out.points[0].penetrationDepth = diff + other.GetRadius();
+
+    return true;
 }
 
 bool PlaneCollider::CollidesWith(AABBCollider& other, CollisionManifold& out)
@@ -24,20 +51,27 @@ bool PlaneCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
     Vector3D maxPoint = other.GetPosition() + other.GetHalfExtents();
     Vector3D minPoint = other.GetPosition() - other.GetHalfExtents();
         
-    if (dist > maxPoint.x || dist < minPoint.x) return false;
-    if (dist > maxPoint.y || dist < minPoint.y) return false;
-    if (dist > maxPoint.z || dist < minPoint.z) return false;
+    Vector3D pointOnPlane = other.GetPosition() - (_normal * dist);
 
-    Vector3D diff = other.GetPosition() - _center;
-    out.collisionNormal = diff.Normalize();
+    if (pointOnPlane.x > maxPoint.x || pointOnPlane.x < minPoint.x) return false;
+    if (pointOnPlane.y > maxPoint.y || pointOnPlane.y < minPoint.y) return false;
+    if (pointOnPlane.z > maxPoint.z || pointOnPlane.z < minPoint.z) return false;
 
-    Vector3D pointBox = this->GetPosition().Clamp(maxPoint, other.GetPosition() + minPoint);
-    Vector3D pointProj = pointBox * (Vector3D::DotProduct(pointBox, out.collisionNormal)) / Vector3D::DotProduct(pointBox, pointBox);
-    float pointDist = (pointProj - _center).Magnitude();
+    out.collisionNormal = _normal;
 
-    out.contactPointCount = 2;
-    out.points[0].position = pointBox;
-    out.points[0].penetrationDepth = pointDist;
+    //Vector3D pointBox = pointOnPlane.Clamp(maxPoint, minPoint);
+    //Vector3D pointProj = other.GetPosition() * (Vector3D::DotProduct(pointBox, _normal)) / Vector3D::DotProduct(pointBox, pointBox);
+
+    //Vector3D diff  = other.GetPosition() * _normal;
+
+    //Vector3D diff  = other.GetPosition() * (Vector3D::DotProduct(other.GetPosition(), _normal)) / Vector3D::DotProduct(other.GetPosition(), other.GetPosition());
+    float diff  = Vector3D::DotProduct(this->GetPosition(), _normal) - (Vector3D::DotProduct(other.GetPosition(), _normal));
+    
+    
+
+    out.contactPointCount = 1;
+    //out.points[0].position = pointBox;
+    out.points[0].penetrationDepth = diff + other.GetHalfExtents().y;
 
     return true;    
 }

@@ -256,6 +256,6 @@ bool OBBCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 
 bool OBBCollider::CollidesWith(PlaneCollider& other, CollisionManifold& out)
 {
-    if (other.CollidesWith(other, out)) return true;
+    if (other.CollidesWith(*this, out)) return true;
     else return false;    
 }

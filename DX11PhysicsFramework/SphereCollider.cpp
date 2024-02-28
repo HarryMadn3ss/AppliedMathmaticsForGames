@@ -66,5 +66,6 @@ bool SphereCollider::CollidesWith(OBBCollider& other, CollisionManifold& out)
 
 bool SphereCollider::CollidesWith(PlaneCollider& other, CollisionManifold& out)
 {
-    return false;
+    if (other.CollidesWith(*this, out)) return true;
+    else return false;
 }

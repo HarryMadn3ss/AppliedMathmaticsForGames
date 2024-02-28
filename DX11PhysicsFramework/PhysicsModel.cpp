@@ -35,12 +35,12 @@ void PhysicsModel::Update(float deltaTime, bool invertGrav)
 
 	if (position.y > 1)
 	{
-		_simulateGravity = true;
+		//_simulateGravity = true;
 		_simulateFriction = false;
 	}
 	else
 	{
-		_simulateGravity = false;
+		//_simulateGravity = false;
 		_simulateFriction = true;
 	}
 
