@@ -665,12 +665,12 @@ void DX11PhysicsFramework::Update()
 			_gameObjects[4]->_physicsModel->AddForce(Vector3D(0, 10, 0));
 		}
 
-		if (GetAsyncKeyState('1'))
+		if (GetAsyncKeyState('S'))
 		{
 			/*_gameObjects[1]->Move(Vector3D(0, 0, -0.02f));*/
 			_gameObjects[1]->MoveForward();
 		}
-		if (GetAsyncKeyState('2'))
+		if (GetAsyncKeyState('W'))
 		{
 			_gameObjects[1]->MoveBackward();
 		}
